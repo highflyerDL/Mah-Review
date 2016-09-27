@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from '../config/db';
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -6,17 +6,32 @@ import dotenv from "dotenv";
 const Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-  email: {
+    __v: {
+      type: Number,
+      select: false
+    },
+    email: {
     type: String,
     unique: true,
     required: true
-  },
-  name: {
-    type: String,
-    required: true
-  },
-  hash: String,
-  salt: String
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    hash: {
+        type: String,
+        required: true
+    },
+    created: {
+        type: Date,
+        default: Date.now
+    },
+    points:{
+        type:Number,
+        default:1000
+    },
+    salt: String
 });
 
 userSchema.methods.setPassword = function (password) {
@@ -39,5 +54,11 @@ userSchema.methods.generateJwt = function() {
     name: this.name,
     exp: parseInt(expiry.getTime() / 1000)
   }, process.env.JWT_SECRET);
+}
+userSchema.methods.toJSON = function() {
+  var obj = this.toObject();
+  delete obj.hash
+  delete obj.salt
+  return obj;
 }
 export default mongoose.model('User', userSchema);
