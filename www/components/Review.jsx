@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Avatar from 'material-ui/Avatar';
-import Divider from 'material-ui/divider';
+import Divider from 'material-ui/Divider';
 import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import Star from 'material-ui/svg-icons/toggle/star';
