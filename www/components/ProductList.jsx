@@ -3,6 +3,7 @@ import Product from "./Product";
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import IconButton from 'material-ui/IconButton';
+import ActionBar from "./ActionBar";
 
 const buttonStyle = {
   height: '100%',
@@ -54,15 +55,18 @@ class ProductList extends Component {
 
   render() {
     return (
-      <div className="product-container">
-        {data.map((product, index) => {
-          return <Product title={product.title}
-                      author={product.author}
-                      img={product.img}
-                      key={product.id}
-                      id={product.id}
-                      index={index}/>
-        })}
+      <div>
+        <ActionBar/>
+        <div className="product-container">
+          {data.map((product, index) => {
+            return <Product title={product.title}
+                        author={product.author}
+                        img={product.img}
+                        key={product.id}
+                        id={product.id}
+                        index={index}/>
+          })}
+        </div>
       </div>
     )
   }
