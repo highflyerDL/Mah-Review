@@ -75,7 +75,7 @@ class ProductDetails extends Component {
                           votes={review.votes}
                           isApproved={review.isApproved}/>
           })}
-          <Editor/>
+          <Editor showSnackbar={this.props.showSnackbar}/>
         </div>
       </div>
     );
