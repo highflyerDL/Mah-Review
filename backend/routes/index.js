@@ -11,6 +11,8 @@ let upload = multer({ storage: storage });
 
 router.post('/login',authCtrl.login);
 router.post('/register',authCtrl.register);
+router.get('/facebook',authCtrl.facebook);
+router.get('/facebook/callback',authCtrl.facebookCallback);
 
 //router.post('/upload',auth,upload.array('files'),postCtrl.upload);
 router.get('/post',postCtrl.index);

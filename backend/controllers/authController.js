@@ -6,32 +6,32 @@ var sendJSONresponse = (res, status, content) => {
 }
 
 
-module.exports.facebook=function(req,res,next){
+function facebook(req,res,next){
   passport.authenticate('facebook', {session: false,scope:'email'})(req,res,next);
   return;
 };
-module.exports.facebookCallback=function(req,res,next){
+function facebookCallback(req,res,next){
   passport.authenticate('facebook', {
     session: false,
   },(err,user,info)=>{
-    let sessionToken=user.generateJWT();
+    let sessionToken=user.generateJwt();
     res.cookie('mycookie', sessionToken, { maxAge: 900000, httpOnly: false});
-    res.redirect('/');
+    res.redirect('/kec');
   })(req,res,next);
 }
-module.exports.google=function(req,res,next){
+function google(req,res,next){
   passport.authenticate('google', {session: false,scope : ['profile', 'email'],accessType: 'offline', approvalPrompt: 'force'})(req,res,next);
   return;
 };
-module.exports.googleCallback=function(req,res,next){
+function googleCallback(req,res,next){
   passport.authenticate('google', {
     session: false,
   },(err,user,info)=>{
     console.log(err);
     console.log(user);
-    let sessionToken=user.generateJWT();
+    let sessionToken=user.generateJwt();
     res.cookie('mycookie', sessionToken, { maxAge: 900000, httpOnly: false});
-    res.redirect('/');
+    res.redirect('/kec');
   })(req,res,next);
 }
 function register(req, res) {
@@ -82,4 +82,4 @@ function login(req, res){
     }
   })(req, res);
 }
-export default { login,register };
+export default { login,register,facebook,google,facebookCallback,googleCallback };
