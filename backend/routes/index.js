@@ -1,24 +1,39 @@
 import { Router } from "express";
-import * as fileCtrl from "../controllers/fileController";
-import * as postController from "../controllers/postController";
-import * as authCtrl from "../controllers/authController";
-import multer from 'multer';
+import postCtrl from "../controllers/postController";
+import catCtrl from "../controllers/categoryController";
+import authCtrl from "../controllers/authController";
+import reviewCtrl from "../controllers/reviewController";
 import auth from "../middlewares/auth";
-
+import multer from 'multer';
+let storage = multer.memoryStorage();
 let router = new Router();
-let upload = multer({ dest: 'uploads/' });
+let upload = multer({ storage: storage });
 
 router.post('/login',authCtrl.login);
 router.post('/register',authCtrl.register);
 
+//router.post('/upload',auth,upload.array('files'),postCtrl.upload);
+router.get('/post',postCtrl.index);
+router.get('/post/:postId',postCtrl.show);
+router.post('/post/',auth,upload.array('files'),postCtrl.create);
+//need admin or owner validator
+router.put('/post/:postId',auth,postCtrl.update);
+router.delete('/post/:postId',auth,postCtrl.destroy);
 
-router.get('/post',postController.index);
-router.get('/post/:postId',postController.show);
-router.get('/post/random',postController.random);
-router.post('/post',auth,upload.array('files'),postController.create);
-router.post('/post/review',auth,postController.reviewPost);
+
+router.get('/category',catCtrl.index);
+router.post('/category',auth,catCtrl.create);
+//need admin or owner validator
+router.put('/category/:catId',auth,catCtrl.update);
+router.delete('/category/:category',auth,catCtrl.destroy);
 
 
-router.get('/file/:fileId',fileCtrl.getFile);
+router.post('/post/:postId/review',auth,reviewCtrl.create);
+//need admin or owner validator
+router.put('/post/:postId/review/:reviewId',auth,reviewCtrl.update);
+router.delete('/post/:postId/review/:reviewId',auth,reviewCtrl.destroy);
+
+
+
 
 export default router;

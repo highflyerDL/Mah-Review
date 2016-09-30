@@ -1,4 +1,4 @@
-import mongoose from '../config/db';
+import mongoose from 'mongoose';
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -19,6 +19,10 @@ var userSchema = new Schema({
       type: String,
       required: true
     },
+    isAdmin: {
+      type: Boolean,
+      required: false
+    },
     hash: {
         type: String,
         required: true
@@ -33,21 +37,35 @@ var userSchema = new Schema({
     },
     salt: String
 });
-
+userSchema.statics.findByToken = function(token){
+    let decodedUser = jwt.verify(token,process.env.JWT_SECRET);
+    if(decodedUser){
+      return this.findOne({_id:decodedUser._id});
+    }else{
+      return Promise.resolve().then(function() {
+        throw new Error('not a mongoose id');
+      });
+    }
+};
+userSchema.methods.canEdit = function (obj) {
+  return this.isAdmin||this._id==obj.owner;
+}
+userSchema.methods.cannotEdit = function (password) {
+  return !this.canEdit;
+}
 userSchema.methods.setPassword = function (password) {
   this.salt = crypto.randomBytes(16).toString("hex");
-  this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString("hex");
+  this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64,'sha512').toString("hex");
 }
 
 userSchema.methods.validPassword = function (password) {
-  var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString("hex");
+  var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64,'sha512').toString("hex");
   return this.hash === hash;
 }
 
 userSchema.methods.generateJwt = function() {
   var expiry = new Date();
   expiry.setDate(expiry.getDate() + 7);
-
   return jwt.sign({
     _id: this._id,
     email: this.email,

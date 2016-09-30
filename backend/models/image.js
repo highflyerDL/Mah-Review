@@ -1,26 +1,22 @@
-import mongoose from '../config/db';
-
+import mongoose from 'mongoose';
+import Promise from 'bluebird';
 const Schema = mongoose.Schema;
 
-const attachmentSchema = mongoose.Schema({
+const imageSchema = mongoose.Schema({
     __v: {
       type: Number,
       select: false
     },
-    originalname: {
+    type: {
         type: String,
         required: true
     },
-    mimetype: {
+    format: {
         type: String,
         required: true
     },
-    filename: {
+    url: {
         type: String,
-        required: true
-    },
-    size: {
-        type: Number,
         required: true
     },
     created: {
@@ -31,10 +27,10 @@ const attachmentSchema = mongoose.Schema({
         type:mongoose.SchemaTypes.ObjectId,
         ref:'User',
     }
-
 });
-attachmentSchema.statics.saveAttachments = function(files,callback) {
+imageSchema.statics.saveImages = function(files,callback) {
     return Promise.map(files,callback);
 };
 
-export default mongoose.model('Attachment', attachmentSchema);
+
+export default mongoose.model('Image', imageSchema);
