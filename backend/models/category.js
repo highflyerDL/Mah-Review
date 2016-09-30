@@ -15,13 +15,7 @@ const categorySchema = mongoose.Schema({
         type: String,
         required: true
     },
-    image:{
-        type:mongoose.SchemaTypes.ObjectId,
-        ref:'Image',
-    }
+
 });
-categorySchema.statics.saveImages = function(files,callback) {
-    return Promise.map(files,callback);
-};
 
 export default mongoose.model('Category', categorySchema);
