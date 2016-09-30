@@ -3,6 +3,7 @@ import postCtrl from "../controllers/postController";
 import catCtrl from "../controllers/categoryController";
 import authCtrl from "../controllers/authController";
 import reviewCtrl from "../controllers/reviewController";
+import userCtrl from "../controllers/userController";
 import auth from "../middlewares/auth";
 import multer from 'multer';
 let storage = multer.memoryStorage();
@@ -13,6 +14,10 @@ router.post('/login',authCtrl.login);
 router.post('/register',authCtrl.register);
 router.get('/facebook',authCtrl.facebook);
 router.get('/facebook/callback',authCtrl.facebookCallback);
+
+
+router.get('/user',auth,userCtrl.index)
+
 
 //router.post('/upload',auth,upload.array('files'),postCtrl.upload);
 router.get('/post',postCtrl.index);

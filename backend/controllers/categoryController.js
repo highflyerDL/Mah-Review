@@ -11,7 +11,7 @@ function index(req,res){
 
 function create(req,res){
   if(!req.body.name||!req.body.description){
-     return res.statusCode(403).json({message:"Missing fields"});
+     return res.status(403).json({message:"Missing fields"});
   }
   Category.create({
     name:req.body.name,
@@ -19,7 +19,7 @@ function create(req,res){
   }).then((category)=>{
     return res.json({category:category});
   }).catch((err)=>{
-    return res.statusCode(403).json({message:err});
+    return res.status(403).json({message:err});
   });
 }
 function requestIsValid(req,res){

@@ -66,22 +66,55 @@ var postSchema = new Schema({
 postSchema.statics.findDetailById = function(id){
     return this.findById(id)
                .populate([{path:'owner', select:'name id'},
-                         {path:'images', select:'source'},
-                         {path:'reviews', select:'id owner content created isApproved'}]);
+                         {path:'images', select:'url type format created'}]);
 };
-postSchema.statics.getPosts=function(keyword=0,categoryId=0,page=0,limit=20){
-  let criteria=[];
-  if(keyword){
-    criteria.push({'title' : new RegExp('^'+keyword+'$', "i")});
+postSchema.statics.getQuery=function(params){
+    let criteria=[];
+
+    for(let key in params){
+      switch(key) {
+        case "title":
+            criteria.push({'title' : new RegExp('.*'+params[key]+'.*', "i")});
+            break;
+        case "category":
+            criteria.push({'category' : params[key]});
+            break;
+        case "description":
+            criteria.push({'description' : new RegExp('.*'+params[key]+'.*', "i")});
+            break;
+        case "owner":
+            criteria.push({'owner' : params[key]});
+            break;
+        }
+    }
+    let query="";
+    if(criteria.length){
+      query={$and :criteria};
+    }
+    return query;
+}
+postSchema.statics.getOrder=function(str){
+  if(!str){
+    return { "created": -1,"reward": -1}
   }
-  if(categoryId){
-    criteria.push({'category' : categoryId});
+  let orderBy={};
+  let orders=str.split("*");
+  if(orders[orders.length-1]==="asc"){
+    for(var i =0;i<orders.length-1;i++){
+      orderBy[orders[i]]=1;
+    }
+  }else{
+    for(var i =0;i<orders.length-1;i++){
+      if(orders[i]!=="dsc")
+        orderBy[orders[i]]=-1;
+    }
   }
-  let query="";
-  if(!criteria.length){
-    query={$and :criteria};
-  }
-  return this.find(query).skip(page*limit).limit(limit);
+  return orderBy;
+}
+postSchema.statics.getPosts=function(query){
+  return this.find(query)
+             .populate([{path:'owner', select:'name id'},
+            {path:'images', select:'url type format created'}]);
 }
 
 export default mongoose.model('Post', postSchema);
