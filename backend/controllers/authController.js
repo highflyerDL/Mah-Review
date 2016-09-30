@@ -1,21 +1,46 @@
 import passport from "passport";
-import mongoose from "mongoose";
 import User from "../models/user";
-
 var sendJSONresponse = (res, status, content) => {
 	res.status(status);
 	res.json(content);
 }
 
-export function register(req, res) {
+
+function facebook(req,res,next){
+  passport.authenticate('facebook', {session: false,scope:'email'})(req,res,next);
+  return;
+};
+function facebookCallback(req,res,next){
+  passport.authenticate('facebook', {
+    session: false,
+  },(err,user,info)=>{
+    let sessionToken=user.generateJwt();
+    res.cookie('mycookie', sessionToken, { maxAge: 900000, httpOnly: false});
+    res.redirect('/kec');
+  })(req,res,next);
+}
+function google(req,res,next){
+  passport.authenticate('google', {session: false,scope : ['profile', 'email'],accessType: 'offline', approvalPrompt: 'force'})(req,res,next);
+  return;
+};
+function googleCallback(req,res,next){
+  passport.authenticate('google', {
+    session: false,
+  },(err,user,info)=>{
+    console.log(err);
+    console.log(user);
+    let sessionToken=user.generateJwt();
+    res.cookie('mycookie', sessionToken, { maxAge: 900000, httpOnly: false});
+    res.redirect('/kec');
+  })(req,res,next);
+}
+function register(req, res) {
   console.log(req.body);
   if(!req.body.name || !req.body.email || !req.body.password){
-    sendJSONresponse(res, 400, {
+    return sendJSONresponse(res, 400, {
       "message": "All fields required"
     });
-    return;
   }
-
   var user = new User();
   user.name = req.body.name;
   user.email = req.body.email;
@@ -33,14 +58,13 @@ export function register(req, res) {
   });
 }
 
-export function login(req, res){
+function login(req, res){
   if(!req.body.email || !req.body.password){
     sendJSONresponse(res, 400, {
       "message": "All fields required"
     });
     return;
   }
-  console.log("body", req.body);
   passport.authenticate("local", (err,user,info)=>{
     var token;
     if(err){
@@ -58,3 +82,4 @@ export function login(req, res){
     }
   })(req, res);
 }
+export default { login,register,facebook,google,facebookCallback,googleCallback };
