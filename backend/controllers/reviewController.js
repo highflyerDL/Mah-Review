@@ -25,28 +25,77 @@ function create(req,res){
           return newPost.save();
         })
       .then((post)=>{
-        res.json(newReview);
+        res.json({data:newReview});
       })
       .catch((err)=>{
         res.status(403).json({message:err});
         console.log(err);
       });
 }
-function requestIsValid(req,res){
-  if(!req.params.postId||!req.params.reviewId){
-      res.status(403).json({message:"Invalid url params"});
-      return false;
-  }
-  if(req.user.cannotEdit()){
-     res.status(401).json({message:"Permission denied"});
-     return false;
-  }
-  return true;
-}
-function update(req,res){
-  if(!requestIsValid(req,res)) return;
-  //update
 
+function update(req,res){
+  var newReview;
+  Review.findById(req.params.reviewId)
+        .then((review)=>{
+          switch(req.params.action){
+            case upVote:
+            case downVote:
+            case approve:
+              newReview = global[req.params.action](review,req.user,res);
+            case edit:
+              newReview = edit(review,req,res);
+            default:
+              //should return reject promise here fix later
+              return res.status(400).json({message:"Invalid action"});
+          }
+          return newReview.save();
+        })
+        .then((review)=>{
+          res.json({data:review});
+        })
+        .catch((err)=>{
+          res.status(400).json({message:err});
+        });
+}
+function upVote(review,user,res){
+   if(review.upVoter.indexOf(user._id)!=-1){
+      res.status(304).json({message:"Already upvote"});
+   }
+   const downVoteIdx=review.downVoter.indexOf(user._id);
+   if(downVoteIdx!=-1){
+      review.downVoter.splice(downVoteIdx, 1);
+      review.vote=review.vote+1;
+   }
+   review.vote=review.vote+1;
+   return review;
+}
+function downVote(review,user,res){
+    if(review.downVoter.indexOf(user._id)!=-1){
+       res.status(304).json({message:"Already downVote"});
+    }
+    const upVoteIdx=review.upVoter.indexOf(user._id);
+    if(upVoteIdx!=-1){
+       review.downVoter.splice(upVoteIdx, 1);
+       review.vote=review.vote-1;
+    }
+    review.vote=review.vote-1;
+    return review;
+}
+function edit(review,req,res){
+    if(req.user.cannotEdit(review)||!req.body.content){
+      res.status(401).json({message:"You are not allow to do this"});
+    }
+    review.content= req.body.content;
+    return review;
+}
+function approve(review,user,res){
+  Post.findById(review.post)
+      .then((post)=>{
+        if(post.owner==user._id){
+          review.isApproved=true;
+        }
+        return review;
+      });
 }
 function destroy(req,res){
   if(!requestIsValid(req,res)) return;

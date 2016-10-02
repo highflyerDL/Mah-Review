@@ -2,9 +2,7 @@ import Post from '../models/post';
 import Img from '../models/image';
 import User from '../models/user';
 import config from '../config/auth';
-import path from "path";
-import cloudinary from 'cloudinary';
-import Datauri from 'datauri';
+
 import validator from '../services/validator';
 
 function index(req,res){
@@ -22,7 +20,7 @@ function index(req,res){
                       totalPost: count,
                       postCount:posts.length,
                       currentPage:page,
-                      posts:posts
+                      data:posts
                     });
     }, function(err) {
       res.json(403, { message:err});
@@ -39,7 +37,7 @@ function show(req,res){
      });
    })
    .then((post)=>{
-      res.json(post);
+      res.json({data:post});
    })
    .catch((err)=>{
       res.status(403).json({message:err})
@@ -64,7 +62,7 @@ function create(req,res){
   user.save()
       .then((user)=>{
         return Img.saveImages(req.files,(file)=>{
-                dUri.format(path.extname(req.files[0].originalname).toString(),req.files[0].buffer);
+                dUri.format(path.extname(file.originalname).toString(),file.buffer);
                 return cloudinary.uploader
                          .upload(dUri.content)
                          .then((img)=>{
@@ -89,29 +87,34 @@ function create(req,res){
           });
         })
       .then((post)=>{
-        res.json({post:post});
+        res.json({data:post});
       })
       .catch((err)=>{
-        return res.status(403).json({error:err});
+        return res.status(403).json({message:err});
       });
 
 }
-function requestIsValid(req,res){
-  if(!req.params.postId||!req.params.reviewId){
-      res.status(403).json({message:"Invalid url params"});
-      return false;
-  }
-  if(req.user.cannotEdit()){
-     res.status(401).json({message:"Permission denied"});
-     return false;
-  }
-  return true;
-}
+
 function update(req,res){
-  if(!requestIsValid(req,res)) return;
-  //update
+   Post.findById(req.params.postId)
+       .then((post)=>{
+          if(req.user.cannotEdit(post)){
+
+          }
+          for(let key in req.body){
+            if(key in ["title","description","reward","category","expire"]){
+              post[key]=req.body[key];
+            }
+          }
+          return post.save();
+       }).then((post)=>{
+         res.json({data:post});
+       }).catch((err)=>{
+         return res.status(403).json({message:err});
+       })
 
 }
+
 function destroy(req,res){
   if(!requestIsValid(req,res)) return;
   //delete
