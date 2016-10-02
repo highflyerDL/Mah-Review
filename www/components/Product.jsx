@@ -13,7 +13,7 @@ class Product extends Component {
     const actionStyle = {
       textAlign: 'center'
     };
-    const pathRoute = "product/"+this.props.id;
+    const pathRoute = "app/product/"+this.props.id;
     
     return (
       <div className={cardStyle}>
