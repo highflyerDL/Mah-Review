@@ -1,24 +1,32 @@
 import Post from '../models/post';
 import Img from '../models/image';
 import User from '../models/user';
+import Review from '../models/review';
+import validator from '../services/validator';
 
 function create(req,res){
-    if(!req.params.postId){
-        return res.status(403).json({message:"Invalid post Id"});
+    const keys=['content']
+    if(!validator(keys,req.body)){
+      return res.json({"message": "All fields required"});
     }
+    var newPost,newReview;
     return Post.findById(req.params.postId)
       .then((post)=>{
-              post.reviews.push({
+              newPost=post;
+              return Review.create({
                 content:req.body.content,
                 owner:req.user.id,
                 post:req.params.postId
               });
-           return post.save();
+        })
+      .then((review)=>{
+          newReview=review;
+          newPost.reviews.unshift(review);
+          return newPost.save();
         })
       .then((post)=>{
-          let reviews=post.reviews;
-          res.json(reviews[reviews.length - 1]);
-        })
+        res.json(newReview);
+      })
       .catch((err)=>{
         res.status(403).json({message:err});
         console.log(err);

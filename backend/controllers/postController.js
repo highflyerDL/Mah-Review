@@ -5,6 +5,8 @@ import config from '../config/auth';
 import path from "path";
 import cloudinary from 'cloudinary';
 import Datauri from 'datauri';
+import validator from '../services/validator';
+
 function index(req,res){
     const orderBy=Post.getOrder(req.query.order);
     const page=req.query.page?req.query.page:1;
@@ -45,6 +47,10 @@ function show(req,res){
 };
 
 function create(req,res){
+  const keys = ['title', 'description','expire'];
+  if(!validator(keys,req.body)){
+    return res.json({"message": "All fields required"});
+  }
   //set up cloudinary
   console.log(req.files);
   let dUri = new Datauri();
@@ -78,6 +84,7 @@ function create(req,res){
             description:req.body.description,
             reward:req.body.reward,
             owner:req.user.id,
+            expire:req.body.expire,
             images:images
           });
         })
