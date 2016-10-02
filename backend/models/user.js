@@ -19,6 +19,10 @@ var userSchema = new Schema({
       type: String,
       required: true
     },
+    avatar:{
+      type:mongoose.SchemaTypes.ObjectId,
+      ref:'Image',
+    },
     isAdmin: {
       type: Boolean,
       required: false

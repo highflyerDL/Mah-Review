@@ -15,8 +15,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../www')));
 
 app.use(passport.initialize());
-
 app.use("/api/", apiRoutes);
+
+// do not modify this. This is for react-router to work
 app.get('*', function (request, response){
   response.sendFile(path.resolve(__dirname, '../www', 'index.html'))
 });
