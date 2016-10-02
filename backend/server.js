@@ -12,13 +12,20 @@ const app = express();
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../www')));
-
 app.use(passport.initialize());
 app.use("/api/", apiRoutes);
-
+app.use(express.static(path.join(__dirname, '../www/landing')));
+app.all("/", function(request, respones){
+	respones.sendFile(path.resolve(__dirname, "../www", "landing", "index.html"))
+});
+app.use(express.static(path.join(__dirname, '../www')));
 // do not modify this. This is for react-router to work
-app.get('*', function (request, response){
+app.get('/app*', function (request, response){
   response.sendFile(path.resolve(__dirname, '../www', 'index.html'))
 });
+
+app.all('*', function(request, response) {
+	response.redirect(303, '/')
+})
+
 export default app;

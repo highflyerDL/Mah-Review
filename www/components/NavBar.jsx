@@ -47,8 +47,8 @@ class NavBar extends Component {
                 onRequestChange={(openDrawer) => this.setState({openDrawer})}>
           <div className="upper-drawer" onTouchTap={this.handleToggle}>MahReview</div>
           <MenuItem onTouchTap={this.showDialog}>Sign in</MenuItem>
-          <Link to="/home"><MenuItem>Home</MenuItem></Link>
-          <Link to="/register"><MenuItem>Menu Item 2</MenuItem></Link>
+          <Link to="/app/home"><MenuItem>Home</MenuItem></Link>
+          <Link to="/app/register"><MenuItem>Menu Item 2</MenuItem></Link>
           <MenuItem onTouchTap={this.handleClose}>Menu Item 3</MenuItem>
         </Drawer>
       </div>

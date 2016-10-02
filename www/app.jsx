@@ -11,12 +11,12 @@ class App extends Component {
     return (
       <MuiThemeProvider>
         <Router history={browserHistory}>
-          <Route path="/" component={Main} >
+          <Route path="/app" component={Main} >
             <IndexRoute component={ProductList}/>
-            <Route path='/register' component={Auth} />
-            <Route path='/home' component={ProductList} />
-            <Route path='/product/:id' component={ProductDetails} />
-            <Route path='*' component={NotFound} />
+            <Route path='/app/register' component={Auth} />
+            <Route path='/app/home' component={ProductList} />
+            <Route path='/app/product/:id' component={ProductDetails} />
+            <Route path='/app*' component={NotFound} />
           </Route>
         </Router>
       </MuiThemeProvider>
