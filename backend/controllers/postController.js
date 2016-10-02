@@ -6,9 +6,24 @@ import path from "path";
 import cloudinary from 'cloudinary';
 import Datauri from 'datauri';
 function index(req,res){
-    Post.find()
-    .then((posts)=>{
-       return res.json({posts:posts});
+    const orderBy=Post.getOrder(req.query.order);
+    const page=req.query.page?req.query.page:1;
+    const limit=req.query.limit?req.query.limit:5;
+    const query=Post.getQuery(req.query);
+    const Promise = require('bluebird');
+    Promise.all([
+      Post.getPosts(query).skip((page-1)*limit).limit(limit).sort(orderBy),
+      Post.count(query)
+    ]).spread(function(posts, count) {
+      const totalPage=Math.ceil(count/limit);
+      res.json(200, { totalPage:totalPage,
+                      totalPost: count,
+                      postCount:posts.length,
+                      currentPage:page,
+                      posts:posts
+                    });
+    }, function(err) {
+      res.json(403, { message:err});
     });
 };
 //show specific post

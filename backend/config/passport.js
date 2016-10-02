@@ -3,9 +3,9 @@ import passportLocal from "passport-local";
 import mongoose from "mongoose";
 import User from "../models/user";
 import config from "./auth";
+import randomstring from 'randomstring';
 const FacebookStrategy =require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const randomstring =require('randomstring');
 
 var LocalStrategy = passportLocal.Strategy;
 passport.use(new LocalStrategy({
