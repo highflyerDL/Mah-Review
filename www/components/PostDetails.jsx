@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import Avatar from 'material-ui/Avatar';
 import Review from './Review';
 import Editor from './Editor';
+
 var reviewMock = [
   {
     id: 1,
@@ -24,7 +25,7 @@ var reviewMock = [
   }
 ];
 
-class ProductDetails extends Component {
+class PostDetails extends Component {
   constructor() {
     super();
   }
@@ -53,7 +54,7 @@ class ProductDetails extends Component {
             </Slider>
           </div>
           <div className='details-container'>
-            <h2>Product name</h2>
+            <h2>Post name</h2>
             <Avatar src="" size={30}/><span style={{position: 'absolute', marginLeft: '10px'}}>Username</span>
             <div style={divStyle}><i>Published at 09-06-2016 9:69</i></div>
             <div style={divStyle}><b>Description: </b>
@@ -82,4 +83,4 @@ class ProductDetails extends Component {
   }
 }
 
-export default ProductDetails;
+export default PostDetails;
