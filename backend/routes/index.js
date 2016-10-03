@@ -37,8 +37,9 @@ router.delete('/category/:category',auth,catCtrl.destroy);
 
 
 router.post('/post/:postId/review',auth,reviewCtrl.create);
+router.post('/review/:reviewId/:action',auth,reviewCtrl.doAction);
 //need admin or owner validator
-router.put('/review/:reviewId/:action',auth,reviewCtrl.update);
+router.put('/review/:reviewId',auth,reviewCtrl.update);
 router.delete('/review/:reviewId',auth,reviewCtrl.destroy);
 
 

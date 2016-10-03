@@ -101,7 +101,7 @@ function update(req,res){
    Post.findById(req.params.postId)
        .then((post)=>{
           if(req.user.cannotEdit(post)){
-
+              return Promise.reject(new Error("Permission denied"));
           }
           for(let key in req.body){
             if(key in ["title","description","reward","category","expire"]){
