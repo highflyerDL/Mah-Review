@@ -1,32 +1,5 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
-var reviewSchema = new Schema({
-  __v: {
-    type: Number,
-    select: false
-  },
-  content:{
-    type: String,
-    required: true
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  isApproved:{
-    type:Boolean,
-    default:false
-  },
-  owner:{
-    type:mongoose.SchemaTypes.ObjectId,
-    ref:'User',
-  },
-  post:{
-    type:mongoose.SchemaTypes.ObjectId,
-    ref:'Post',
-  }
-});
-
 var postSchema = new Schema({
   __v: {
     type: Number,
@@ -52,6 +25,10 @@ var postSchema = new Schema({
       type: Date,
       default: Date.now
   },
+  expire: {
+      type: Date,
+      required: true
+  },
   owner:{
       type:mongoose.SchemaTypes.ObjectId,
       ref:'User',
@@ -60,17 +37,22 @@ var postSchema = new Schema({
       type:mongoose.SchemaTypes.ObjectId,
       ref:'Image',
   }],
-  reviews:[reviewSchema],
+  reviews:[{
+      type:mongoose.SchemaTypes.ObjectId,
+      ref:'Review',
+  }],
 });
 
 postSchema.statics.findDetailById = function(id){
+    let order={vote:-1,created:-1}
     return this.findById(id)
                .populate([{path:'owner', select:'name id'},
-                         {path:'images', select:'url type format created'}]);
+                         {path:'images', select:'url type format created'},
+                         {path:'reviews', options: { sort: order}}]);
 };
 postSchema.statics.getQuery=function(params){
-    let criteria=[];
-
+    var today = new Date();
+    let criteria=[{expire:{$gte:today}}];
     for(let key in params){
       switch(key) {
         case "title":

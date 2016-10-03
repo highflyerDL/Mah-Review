@@ -16,7 +16,8 @@ router.get('/facebook',authCtrl.facebook);
 router.get('/facebook/callback',authCtrl.facebookCallback);
 
 
-router.get('/user',auth,userCtrl.index)
+router.get('/user',auth,userCtrl.index);
+router.put('/user',auth,userCtrl.update);
 
 
 //router.post('/upload',auth,upload.array('files'),postCtrl.upload);
@@ -37,8 +38,8 @@ router.delete('/category/:category',auth,catCtrl.destroy);
 
 router.post('/post/:postId/review',auth,reviewCtrl.create);
 //need admin or owner validator
-router.put('/post/:postId/review/:reviewId',auth,reviewCtrl.update);
-router.delete('/post/:postId/review/:reviewId',auth,reviewCtrl.destroy);
+router.put('/review/:reviewId/:action',auth,reviewCtrl.update);
+router.delete('/review/:reviewId',auth,reviewCtrl.destroy);
 
 
 
