@@ -2,7 +2,9 @@ import Post from '../models/post';
 import Img from '../models/image';
 import User from '../models/user';
 import config from '../config/auth';
-
+import Datauri from 'datauri';
+import path from "path";
+import cloudinary from 'cloudinary';
 import validator from '../services/validator';
 
 function index(req,res){
@@ -16,14 +18,14 @@ function index(req,res){
       Post.count(query)
     ]).spread(function(posts, count) {
       const totalPage=Math.ceil(count/limit);
-      res.json(200, { totalPage:totalPage,
+      res.json({ totalPage:totalPage,
                       totalPost: count,
                       postCount:posts.length,
                       currentPage:page,
                       data:posts
                     });
     }, function(err) {
-      res.json(403, { message:err});
+      res.status(403).json({ message:err});
     });
 };
 //show specific post
@@ -99,10 +101,10 @@ function update(req,res){
    Post.findById(req.params.postId)
        .then((post)=>{
           if(req.user.cannotEdit(post)){
-
+              return Promise.reject("Permission denied");
           }
           for(let key in req.body){
-            if(key in ["title","description","reward","category","expire"]){
+            if(["title","description","reward","category","expire"].indexOf(key)!=-1){
               post[key]=req.body[key];
             }
           }

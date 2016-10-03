@@ -32,7 +32,7 @@ function update(req,res){
   Category.findById(req.params.catId)
           .then((category)=>{
               for(let key in req.body){
-                if(key in ["name","description"]){
+                if(["name","description"].indexOf(key)!=-1){
                   category[key]=req.body[key];
                 }
               }

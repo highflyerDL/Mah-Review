@@ -3,7 +3,7 @@ import Img from '../models/image';
 import User from '../models/user';
 import Review from '../models/review';
 import validator from '../services/validator';
-
+import Promise from 'bluebird';
 function create(req,res){
     const keys=['content']
     if(!validator(keys,req.body)){
@@ -32,23 +32,39 @@ function create(req,res){
         console.log(err);
       });
 }
-
-function update(req,res){
+function doAction(req,res){
   var newReview;
   Review.findById(req.params.reviewId)
         .then((review)=>{
           switch(req.params.action){
-            case upVote:
-            case downVote:
-            case approve:
-              newReview = global[req.params.action](review,req.user,res);
-            case edit:
-              newReview = edit(review,req,res);
+            case "upVote":
+              return upVote(review,req.user,res);
+            case "downVote":
+              return downVote(review,req.user,res);
+            case "approve":
+              return approve(review,req.user,res);
             default:
               //should return reject promise here fix later
-              return res.status(400).json({message:"Invalid action"});
+              return Promise.reject("Invalid action");
           }
-          return newReview.save();
+        })
+        .then((review)=>{
+          console.log("wtf",review);
+          res.json({data:review});
+        })
+        .catch((err)=>{
+          console.log(err);
+          res.status(400).json({message:err});
+        });
+}
+function update(req,res){
+  Review.findById(req.params.reviewId)
+        .then((review)=>{
+          if(req.user.cannotEdit(review)||!req.body.content){
+            return Promise.reject("Permission denied");
+          }
+          review.content= req.body.content;
+          return review.save();
         })
         .then((review)=>{
           res.json({data:review});
@@ -59,46 +75,61 @@ function update(req,res){
 }
 function upVote(review,user,res){
    if(review.upVoter.indexOf(user._id)!=-1){
-      res.status(304).json({message:"Already upvote"});
+      return Promise.reject("Already up vote");
    }
    const downVoteIdx=review.downVoter.indexOf(user._id);
    if(downVoteIdx!=-1){
       review.downVoter.splice(downVoteIdx, 1);
       review.vote=review.vote+1;
    }
+   review.upVoter.push(user._id);
    review.vote=review.vote+1;
-   return review;
+   return review.save();
 }
 function downVote(review,user,res){
     if(review.downVoter.indexOf(user._id)!=-1){
-       res.status(304).json({message:"Already downVote"});
+        return Promise.reject("Already down vote");
     }
     const upVoteIdx=review.upVoter.indexOf(user._id);
     if(upVoteIdx!=-1){
        review.downVoter.splice(upVoteIdx, 1);
        review.vote=review.vote-1;
     }
+    review.downVoter.push(user._id);
     review.vote=review.vote-1;
-    return review;
+    return review.save();
 }
-function edit(review,req,res){
-    if(req.user.cannotEdit(review)||!req.body.content){
-      res.status(401).json({message:"You are not allow to do this"});
-    }
-    review.content= req.body.content;
-    return review;
-}
+
 function approve(review,user,res){
-  Post.findById(review.post)
+  return Post.findById(review.post)
       .then((post)=>{
-        if(post.owner==user._id){
+        if(post.owner==user._id||user.isAdmin){
           review.isApproved=true;
+          return review.save();
         }
-        return review;
+        return Promise.reject("Permission denied");
       });
 }
 function destroy(req,res){
-  if(!requestIsValid(req,res)) return;
-  //delete
+  var foundReview;
+  Review.findById(req.params.reviewId)
+        .then((review)=>{
+          if(req.user.cannotEdit(review)){
+             return Promise.reject("Permission denied");
+          }
+          foundReview=review;
+          return Post.findById(review.post);
+        }).then((post)=>{
+             let reviewIndex=post.reviews.indexOf(foundReview._id);
+             post.reviews.splice(reviewIndex,1);
+             return post.save();
+        }).then((post)=>{
+             return foundReview.remove();
+        }).then(()=>{
+          return res.json({message:"Delete successfully"});
+        })
+        .catch((err)=>{
+            return res.status(401).json({message:err});
+        });
 }
-export default {create,update,destroy}
+export default {create,update,destroy,doAction}
