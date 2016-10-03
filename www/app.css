@@ -2,6 +2,10 @@ body {
   font-family: Roboto, sans-serif;
 }
 
+.non-underline {
+  text-decoration: none;
+}
+
 .review-container li {
   list-style: none;
 }

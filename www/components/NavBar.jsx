@@ -5,11 +5,17 @@ import MenuItem from "material-ui/MenuItem";
 import AppBar from 'material-ui/AppBar';
 import { List, ListItem } from "material-ui/List";
 import { Link }from 'react-router';
+import { browserHistory } from 'react-router'
+
+function goOAuth(socnet){
+  console.log("in oauth",socnet);
+  browserHistory.push("/api/"+socnet);
+}
 
 const dialogContent =
   <List>
-    <ListItem primaryText="Sign in using Google account" />
-    <ListItem primaryText="Sign in using Facebook account" />
+    <a className="non-underline" href="api/google"><ListItem primaryText="Sign in using Google account"/></a>
+    <a className="non-underline" href="api/facebook"><ListItem primaryText="Sign in using Facebook account"/></a>
   </List>;
 
 class NavBar extends Component {

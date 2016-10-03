@@ -4,7 +4,7 @@ import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import IconButton from 'material-ui/IconButton';
 import ActionBar from "./ActionBar";
-import callApi from '../util/callApi';
+import {callQueryParamsApi} from '../util/callApi';
 
 const buttonStyle = {
   height: '100%',
@@ -52,7 +52,7 @@ class PostList extends Component {
   constructor() {
     super();
     this.state = { open: false };
-
+    callQueryParamsApi("post",{}).then((res)=>console.log(res),(err)=>console.log(err))
   }
 
   render() {
