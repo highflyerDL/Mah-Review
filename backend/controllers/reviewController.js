@@ -3,7 +3,7 @@ import Img from '../models/image';
 import User from '../models/user';
 import Review from '../models/review';
 import validator from '../services/validator';
-
+import Promise from 'bluebird';
 function create(req,res){
     const keys=['content']
     if(!validator(keys,req.body)){
@@ -98,7 +98,22 @@ function approve(review,user,res){
       });
 }
 function destroy(req,res){
-  if(!requestIsValid(req,res)) return;
-  //delete
+  var foundReview;
+  Review.findById(req.params.reviewId)
+        .then((review)=>{
+          if(req.user.cannotEdit(review)){
+             return Promise.reject(new Error("Permission denied"));
+          }
+          foundReview=review;
+          return Post.findById(review.post);
+        }).then((post)=>{
+             let reviewIndex=post.reviews.indexOf(foundReview._id);
+             post.reviews.splice(reviewIndex,1);
+             return post.save();
+        }).then((post)=>{
+             return foundReview.remove();
+        }).catch((err)=>{
+            return res.status(401).json({message:err});
+        });
 }
 export default {create,update,destroy}
