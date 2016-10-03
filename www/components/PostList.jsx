@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import Product from "./Product";
+import Post from "./Post";
 import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import IconButton from 'material-ui/IconButton';
 import ActionBar from "./ActionBar";
+import callApi from '../util/callApi';
 
 const buttonStyle = {
   height: '100%',
@@ -47,10 +48,11 @@ const data = [{
   author: 'fancycravel',
 }, ];
 
-class ProductList extends Component {
+class PostList extends Component {
   constructor() {
     super();
     this.state = { open: false };
+
   }
 
   render() {
@@ -59,7 +61,7 @@ class ProductList extends Component {
         <ActionBar/>
         <div className="product-container">
           {data.map((product, index) => {
-            return <Product title={product.title}
+            return <Post title={product.title}
                         author={product.author}
                         img={product.img}
                         key={product.id}
@@ -72,4 +74,4 @@ class ProductList extends Component {
   }
 }
 
-export default ProductList;
+export default PostList;

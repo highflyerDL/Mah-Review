@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from "react-router";
-class Product extends Component {
+class Post extends Component {
   constructor() {
     super();
   }
@@ -13,7 +13,7 @@ class Product extends Component {
     const actionStyle = {
       textAlign: 'center'
     };
-    const pathRoute = "app/product/"+this.props.id;
+    const pathRoute = "app/post/"+this.props.id;
     
     return (
       <div className={cardStyle}>
@@ -44,4 +44,4 @@ class Product extends Component {
   }
 }
 
-export default Product;
+export default Post;

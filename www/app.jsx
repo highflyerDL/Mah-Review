@@ -3,8 +3,8 @@ import { Router, Route, Link, IndexRoute, browserHistory } from 'react-router';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Main from "./components/Main";
 import Auth from "./components/Auth";
-import ProductList from "./components/ProductList";
-import ProductDetails from "./components/ProductDetails";
+import PostList from "./components/PostList";
+import PostDetails from "./components/PostDetails";
 
 class App extends Component {
   render() {
@@ -12,10 +12,10 @@ class App extends Component {
       <MuiThemeProvider>
         <Router history={browserHistory}>
           <Route path="/app" component={Main} >
-            <IndexRoute component={ProductList}/>
+            <IndexRoute component={PostList}/>
             <Route path='/app/register' component={Auth} />
-            <Route path='/app/home' component={ProductList} />
-            <Route path='/app/product/:id' component={ProductDetails} />
+            <Route path='/app/home' component={PostList} />
+            <Route path='/app/post/:id' component={PostDetails} />
             <Route path='/app*' component={NotFound} />
           </Route>
         </Router>
