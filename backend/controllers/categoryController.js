@@ -3,7 +3,7 @@ import Img from '../models/image';
 
 
 function index(req, res) {
-    Category.find()
+    Category.find().select("-__v")
         .then((categories) => {
             return res.json({ data: categories });
         });
@@ -29,7 +29,7 @@ function create(req, res) {
 }
 
 function update(req, res) {
-    Category.findById(req.params.catId)
+    Category.findById(req.params.catId).select("-__v")
         .then((category) => {
             for (let key in req.body) {
                 if (["name", "description"].indexOf(key) != -1) {

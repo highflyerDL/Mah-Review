@@ -3,10 +3,6 @@ import Promise from 'bluebird';
 const Schema = mongoose.Schema;
 
 const imageSchema = mongoose.Schema({
-    __v: {
-        type: Number,
-        select: false
-    },
     type: {
         type: String,
         required: true
