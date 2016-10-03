@@ -4,7 +4,7 @@ import chalk from "chalk";
 mongoose.Promise = require('bluebird');
 let url="mongodb://localhost:27017/mern";
 if(process.env.PORT){
-   url="mongodb://beochot:beochot@ds021166.mlab.com:21166/mahapp";
+   url="mongodb://mahteam:mahteam@ds033976.mlab.com:33976/heroku_xb01qh9s";
 }
 
 mongoose.connect(url);
