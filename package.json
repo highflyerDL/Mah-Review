@@ -36,6 +36,7 @@
     "sass-loader": "^4.0.2",
     "stream-buffers": "^3.0.1",
     "style-loader": "^0.13.1",
+    "concurrently": "^2.2.0",
     "webpack": "^1.13.2"
   },
   "scripts": {
@@ -45,7 +46,6 @@
     "start": "concurrently --kill-others \"mongod\" \"npm run build\" \"npm run server\""
   },
   "devDependencies": {
-    "concurrently": "^2.2.0",
     "css-loader": "^0.25.0",
     "react-hot-loader": "^3.0.0-beta.3",
     "webpack-dev-server": "^1.15.1"
