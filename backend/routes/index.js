@@ -10,37 +10,37 @@ let storage = multer.memoryStorage();
 let router = new Router();
 let upload = multer({ storage: storage });
 
-router.post('/login',authCtrl.login);
-router.post('/register',authCtrl.register);
-router.get('/facebook',authCtrl.facebook);
-router.get('/facebook/callback',authCtrl.facebookCallback);
+router.post('/login', authCtrl.login);
+router.post('/register', authCtrl.register);
+router.get('/facebook', authCtrl.facebook);
+router.get('/facebook/callback', authCtrl.facebookCallback);
 
 
-router.get('/user',auth,userCtrl.index);
-router.put('/user',auth,userCtrl.update);
+router.get('/user', auth, userCtrl.index);
+router.put('/user', auth, userCtrl.update);
 
 
 //router.post('/upload',auth,upload.array('files'),postCtrl.upload);
-router.get('/post',postCtrl.index);
-router.get('/post/:postId',postCtrl.show);
-router.post('/post/',auth,upload.array('files'),postCtrl.create);
+router.get('/post', postCtrl.index);
+router.get('/post/:postId', postCtrl.show);
+router.post('/post/', auth, upload.array('files'), postCtrl.create);
 //need admin or owner validator
-router.put('/post/:postId',auth,postCtrl.update);
-router.delete('/post/:postId',auth,postCtrl.destroy);
+router.put('/post/:postId', auth, postCtrl.update);
+router.delete('/post/:postId', auth, postCtrl.destroy);
 
 
-router.get('/category',catCtrl.index);
-router.post('/category',auth,catCtrl.create);
+router.get('/category', catCtrl.index);
+router.post('/category', auth, catCtrl.create);
 //need admin or owner validator
-router.put('/category/:catId',auth,catCtrl.update);
-router.delete('/category/:category',auth,catCtrl.destroy);
+router.put('/category/:catId', auth, catCtrl.update);
+router.delete('/category/:category', auth, catCtrl.destroy);
 
 
-router.post('/post/:postId/review',auth,reviewCtrl.create);
-router.post('/review/:reviewId/:action',auth,reviewCtrl.doAction);
+router.post('/post/:postId/review', auth, reviewCtrl.create);
+router.post('/review/:reviewId/:action', auth, reviewCtrl.doAction);
 //need admin or owner validator
-router.put('/review/:reviewId',auth,reviewCtrl.update);
-router.delete('/review/:reviewId',auth,reviewCtrl.destroy);
+router.put('/review/:reviewId', auth, reviewCtrl.update);
+router.delete('/review/:reviewId', auth, reviewCtrl.destroy);
 
 
 

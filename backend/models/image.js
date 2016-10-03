@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 const imageSchema = mongoose.Schema({
     __v: {
-      type: Number,
-      select: false
+        type: Number,
+        select: false
     },
     type: {
         type: String,
@@ -21,15 +21,15 @@ const imageSchema = mongoose.Schema({
     },
     created: {
         type: Date,
-        default:Date.now
+        default: Date.now
     },
-    owner:{
-        type:mongoose.SchemaTypes.ObjectId,
-        ref:'User',
+    owner: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
     }
 });
-imageSchema.statics.saveImages = function(files,callback) {
-    return Promise.map(files,callback);
+imageSchema.statics.saveImages = function(files, callback) {
+    return Promise.map(files, callback);
 };
 
 
