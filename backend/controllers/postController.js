@@ -2,7 +2,9 @@ import Post from '../models/post';
 import Img from '../models/image';
 import User from '../models/user';
 import config from '../config/auth';
-
+import Datauri from 'datauri';
+import path from "path";
+import cloudinary from 'cloudinary';
 import validator from '../services/validator';
 
 function index(req,res){
