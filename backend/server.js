@@ -4,12 +4,12 @@ import passport from "./config/passport";
 import apiRoutes from "./routes/index";
 import "./config/passport";
 import bodyParser from "body-parser";
-import compression from 'compression';
+//import compression from 'compression';
 import path from "path";
 import mongoose from './config/db';
 const app = express();
 
-app.use(compression());
+//app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
