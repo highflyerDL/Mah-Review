@@ -13,10 +13,9 @@ class App extends Component {
         <Router history={browserHistory}>
           <Route path="/app" component={Main} >
             <IndexRoute component={PostList}/>
-            <Route path='/app/register' component={Auth} />
-            <Route path='/app/home' component={PostList} />
-            <Route path='/app/post/:id' component={PostDetails} />
-            <Route path='/app*' component={NotFound} />
+            <Route path='register' component={Auth} />
+            <Route path='post/:id' component={PostDetails} />
+            <Route path='*' component={NotFound} />
           </Route>
         </Router>
       </MuiThemeProvider>
