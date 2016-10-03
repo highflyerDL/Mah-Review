@@ -37,19 +37,23 @@ function doAction(req,res){
   Review.findById(req.params.reviewId)
         .then((review)=>{
           switch(req.params.action){
-            case upVote:
-            case downVote:
-            case approve:
-              return global[req.params.action](review,req.user,res);
+            case "upVote":
+              return upVote(review,req.user,res);
+            case "downVote":
+              return downVote(review,req.user,res);
+            case "approve":
+              return approve(review,req.user,res);
             default:
               //should return reject promise here fix later
-              return Promise.reject(new Error("Invalid action"));
+              return Promise.reject("Invalid action");
           }
         })
         .then((review)=>{
+          console.log("wtf",review);
           res.json({data:review});
         })
         .catch((err)=>{
+          console.log(err);
           res.status(400).json({message:err});
         });
 }
@@ -57,7 +61,7 @@ function update(req,res){
   Review.findById(req.params.reviewId)
         .then((review)=>{
           if(req.user.cannotEdit(review)||!req.body.content){
-            return Promise.reject(new Error("Permission denied"));
+            return Promise.reject("Permission denied");
           }
           review.content= req.body.content;
           return review.save();
@@ -71,37 +75,39 @@ function update(req,res){
 }
 function upVote(review,user,res){
    if(review.upVoter.indexOf(user._id)!=-1){
-      return Promise.reject(new Error("Already up vote"));
+      return Promise.reject("Already up vote");
    }
    const downVoteIdx=review.downVoter.indexOf(user._id);
    if(downVoteIdx!=-1){
       review.downVoter.splice(downVoteIdx, 1);
       review.vote=review.vote+1;
    }
+   review.upVoter.push(user._id);
    review.vote=review.vote+1;
    return review.save();
 }
 function downVote(review,user,res){
     if(review.downVoter.indexOf(user._id)!=-1){
-        return Promise.reject(new Error("Already down vote"));
+        return Promise.reject("Already down vote");
     }
     const upVoteIdx=review.upVoter.indexOf(user._id);
     if(upVoteIdx!=-1){
        review.downVoter.splice(upVoteIdx, 1);
        review.vote=review.vote-1;
     }
+    review.downVoter.push(user._id);
     review.vote=review.vote-1;
     return review.save();
 }
 
 function approve(review,user,res){
-  Post.findById(review.post)
+  return Post.findById(review.post)
       .then((post)=>{
-        if(post.owner==user._id){
+        if(post.owner==user._id||user.isAdmin){
           review.isApproved=true;
           return review.save();
         }
-        return Promise.reject(new Error("Already approved"));
+        return Promise.reject("Permission denied");
       });
 }
 function destroy(req,res){
@@ -109,7 +115,7 @@ function destroy(req,res){
   Review.findById(req.params.reviewId)
         .then((review)=>{
           if(req.user.cannotEdit(review)){
-             return Promise.reject(new Error("Permission denied"));
+             return Promise.reject("Permission denied");
           }
           foundReview=review;
           return Post.findById(review.post);
@@ -119,7 +125,10 @@ function destroy(req,res){
              return post.save();
         }).then((post)=>{
              return foundReview.remove();
-        }).catch((err)=>{
+        }).then(()=>{
+          return res.json({message:"Delete successfully"});
+        })
+        .catch((err)=>{
             return res.status(401).json({message:err});
         });
 }
