@@ -32,6 +32,7 @@ function index(req, res) {
 //show specific post
 function show(req, res) {
     Post.findDetailById(req.params.postId)
+        .select("-__v")
         .then((post) => {
             return User.populate(post, {
                 path: "reviews.owner",
@@ -100,6 +101,7 @@ function create(req, res) {
 
 function update(req, res) {
     Post.findById(req.params.postId)
+        .select("-__v")
         .then((post) => {
             if (req.user.cannotEdit(post)) {
                 return Promise.reject("Permission denied");
