@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import NavBar from "./NavBar";
 import Snackbar from 'material-ui/Snackbar';
 import FlatButton from "material-ui/FlatButton";
+import {getCookie, saveItemLocalStorage} from "../util/storageFactory";
 
 class Main extends Component {
   constructor(props) {
@@ -28,6 +29,10 @@ class Main extends Component {
     this.defaultActions = [
       <FlatButton label="Cancel" primary={true} onTouchTap={this.handleDialogClose} />
     ];
+    const token = getCookie("mycookie");
+    if(token){
+      saveItemLocalStorage("token", token);
+    }
   }
 
   handleDialogClose() {

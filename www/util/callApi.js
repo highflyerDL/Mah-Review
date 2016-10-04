@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import {getItemLocalStorage} from "../util/storageFactory";
 
 const api_url = "http://localhost:3000/api/";
 
@@ -43,6 +44,7 @@ function callQueryParamsApi(api, params, method="get"){
 function callFormDataApi(api, body, method="get"){
   return fetch(api_url+api, {
     headers: {
+      "Authorization": getItemLocalStorage("token")
     },
     method,
     body: body
@@ -57,4 +59,4 @@ function callFormDataApi(api, body, method="get"){
   });
 }
 
-export default {callJsonApi, callQueryParamsApi, callFormDataApi};
+export {callJsonApi, callQueryParamsApi, callFormDataApi};
