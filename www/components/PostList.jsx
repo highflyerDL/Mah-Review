@@ -49,16 +49,16 @@ const data = [{
 }, ];
 
 class PostList extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = { open: false };
-    callQueryParamsApi("post",{}).then((res)=>console.log(res),(err)=>console.log(err))
+    callQueryParamsApi("post",{}).then((res)=>console.log(res),(err)=>console.log(err));
   }
 
   render() {
     return (
       <div>
-        <ActionBar/>
+        <ActionBar showDialog={this.props.showDialog}/>
         <div className="product-container">
           {data.map((product, index) => {
             return <Post title={product.title}

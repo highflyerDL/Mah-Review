@@ -36,7 +36,7 @@ class NavBar extends Component {
   showDialog() {
     var dialog = {
       title: "Sign in",
-      content: dialogContent
+      content: dialogContent,
     };
     this.props.showDialog(dialog);
   }

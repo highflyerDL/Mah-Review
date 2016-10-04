@@ -11,7 +11,7 @@ class Main extends Component {
       dialog: {
         title: "",
         open: false,
-        actions: null,
+        actions: [],
         content: null
       },
       snackbar: {
@@ -45,7 +45,7 @@ class Main extends Component {
 
   onShowDialog(dialog) {
     dialog.open = true;
-    dialog.actions = this.defaultActions;
+    dialog.actions.push(this.defaultActions);
     this.setState({dialog: dialog});
   }
 
@@ -59,7 +59,8 @@ class Main extends Component {
       <div>
         <NavBar showDialog={this.onShowDialog} />
         {this.props.children && React.cloneElement(this.props.children, {
-          showSnackbar: this.onShowSnackbar
+          showSnackbar: this.onShowSnackbar,
+          showDialog: this.onShowDialog
         })}
         <Dialog title={this.state.dialog.title}
                 actions={this.state.dialog.actions}

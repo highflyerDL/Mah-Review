@@ -40,4 +40,21 @@ function callQueryParamsApi(api, params, method="get"){
   });
 }
 
-export default {callJsonApi, callQueryParamsApi};
+function callFormDataApi(api, body, method="get"){
+  return fetch(api_url+api, {
+    headers: {
+    },
+    method,
+    body: body
+  })
+  .then(response => response.json().then(json => ({json, response})))
+  .then(({json, response})=>{
+    if(!response.ok){
+      return Promise.reject(json); 
+    }
+
+    return json;
+  });
+}
+
+export default {callJsonApi, callQueryParamsApi, callFormDataApi};
