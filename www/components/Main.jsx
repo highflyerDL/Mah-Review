@@ -45,7 +45,11 @@ class Main extends Component {
 
   onShowDialog(dialog) {
     dialog.open = true;
-    dialog.actions.push(this.defaultActions);
+    if(dialog.actions){
+      dialog.actions.push(this.defaultActions);
+    } else {
+      dialog.actions = this.defaultActions;
+    }
     this.setState({dialog: dialog});
   }
 
