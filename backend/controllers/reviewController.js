@@ -6,7 +6,7 @@ import validator from '../services/validator';
 import Promise from 'bluebird';
 
 function create(req, res) {
-    const keys = ['content']
+    const keys = ['content'];
     if (!validator(keys, req.body)) {
         return res.json({ "message": "All fields required" });
     }
@@ -27,6 +27,7 @@ function create(req, res) {
             return newPost.save();
         })
         .then((post) => {
+            console.log(post);
             res.json({ data: newReview });
         })
         .catch((err) => {

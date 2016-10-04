@@ -58,7 +58,7 @@ passport.use(new FacebookStrategy({
                     };
                     newUser.name = profile.name.givenName + " " + profile.name.familyName; // look at the passport user profile to see how names are returned
                     newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-                    newUser.passhash = randomstring.generate();
+                    newUser.hash = randomstring.generate();
                     newUser.save(function(err) {
                         if (err)
                             throw err;
@@ -111,7 +111,7 @@ passport.use(new GoogleStrategy({
                     };
                     newUser.name = profile.displayName;
                     newUser.email = profile.emails[0].value; // pull the first email
-                    newUser.passhash = randomstring.generate();
+                    newUser.hash = randomstring.generate();
                     // save the user
                     newUser.save(function(err) {
                         if (err)

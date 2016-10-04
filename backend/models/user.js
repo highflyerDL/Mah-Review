@@ -38,13 +38,14 @@ var userSchema = new Schema({
     salt: String
 });
 userSchema.statics.findByToken = function(token) {
+    console.log(token);
     let decodedUser = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decodedUser);
     if (decodedUser) {
+        console.log(decodedUser._id);
         return this.findOne({ _id: decodedUser._id }).select("-__v");
     } else {
-        return Promise.resolve().then(function() {
-            throw new Error('not a mongoose id');
-        });
+        return Promise.reject("User not found");
     }
 };
 userSchema.methods.canEdit = function(obj) {
@@ -66,6 +67,7 @@ userSchema.methods.validPassword = function(password) {
 userSchema.methods.generateJwt = function() {
     var expiry = new Date();
     expiry.setDate(expiry.getDate() + 7);
+    console.log(this._id);
     return jwt.sign({
         _id: this._id,
         email: this.email,

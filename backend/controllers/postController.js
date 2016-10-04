@@ -6,6 +6,7 @@ import Datauri from 'datauri';
 import path from "path";
 import cloudinary from 'cloudinary';
 import validator from '../services/validator';
+import Category from '../models/category';
 
 function index(req, res) {
     const orderBy = Post.getOrder(req.query.order);
@@ -49,12 +50,15 @@ function show(req, res) {
 };
 
 function create(req, res) {
-    const keys = ['title', 'description', 'expire'];
+    const keys = ['title', 'description', 'expire','category'];
     if (!validator(keys, req.body)) {
         return res.json({ "message": "All fields required" });
     }
-    //set up cloudinary
-    console.log(req.files);
+    const expire = new Date(req.body.expire);
+    const current = new Date();
+    if(current.getTime()>expire.getTime()){
+        return res.json({ "message": "Expire date must be in the future" });
+    }
     let dUri = new Datauri();
     cloudinary.config(config.cloudinary);
     //using point to post
@@ -62,40 +66,42 @@ function create(req, res) {
     if (user.points < req.body.reward) {
         return res.status(403).json({ error: "You dont have enough points." });
     }
-    user.points = user.points - req.body.reward;
-    user.save()
-        .then((user) => {
-            return Img.saveImages(req.files, (file) => {
-                dUri.format(path.extname(file.originalname).toString(), file.buffer);
-                return cloudinary.uploader
-                    .upload(dUri.content)
-                    .then((img) => {
-                        return Img.create({
-                            url: img.url,
-                            format: img.format,
-                            type: img.resource_type,
-                            owner: req.user.id
+    Category.findById(req.body.category)
+            .then((category)=>{
+              user.points = user.points - req.body.reward;
+              return user.save();
+            })
+            .then((user) => {
+                return Img.saveImages(req.files, (file) => {
+                    dUri.format(path.extname(file.originalname).toString(), file.buffer);
+                    return cloudinary.uploader
+                        .upload(dUri.content)
+                        .then((img) => {
+                            return Img.create({
+                                url: img.url,
+                                format: img.format,
+                                type: img.resource_type
+                            });
                         });
-                    });
+                });
+            })
+            .then((images) => {
+                return Post.create({
+                    title: req.body.title,
+                    description: req.body.description,
+                    reward: req.body.reward,
+                    owner: req.user.id,
+                    expire: req.body.expire,
+                    category:req.body.category,
+                    images: images
+                });
+            })
+            .then((post) => {
+                res.json({ data: post });
+            })
+            .catch((err) => {
+                return res.status(403).json({ message: err });
             });
-        })
-        .then((images) => {
-            console.log(images);
-            return Post.create({
-                title: req.body.title,
-                description: req.body.description,
-                reward: req.body.reward,
-                owner: req.user.id,
-                expire: req.body.expire,
-                images: images
-            });
-        })
-        .then((post) => {
-            res.json({ data: post });
-        })
-        .catch((err) => {
-            return res.status(403).json({ message: err });
-        });
 
 }
 
