@@ -17,6 +17,7 @@ router.get('/facebook/callback', authCtrl.facebookCallback);
 
 
 router.get('/user', auth, userCtrl.index);
+router.post('/user/avatar',auth,upload.single('avatar'),userCtrl.changeAvatar)
 router.put('/user', auth, userCtrl.update);
 
 

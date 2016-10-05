@@ -5,7 +5,6 @@ export default function(req, res, next) {
     if (sessionToken) {
         User.findByToken(sessionToken)
             .then((user) => {
-                console.log(user);
                 req['user'] = user;
                 next();
             }).catch((err) => {

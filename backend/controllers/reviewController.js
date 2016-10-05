@@ -8,7 +8,7 @@ import Promise from 'bluebird';
 function create(req, res) {
     const keys = ['content'];
     if (!validator(keys, req.body)) {
-        return res.json({ "message": "All fields required" });
+        return res.status(403).json({ "message": "All fields required" });
     }
     var newPost, newReview;
     return Post.findById(req.params.postId)
@@ -27,12 +27,10 @@ function create(req, res) {
             return newPost.save();
         })
         .then((post) => {
-            console.log(post);
             res.json({ data: newReview });
         })
         .catch((err) => {
             res.status(403).json({ message: err });
-            console.log(err);
         });
 }
 

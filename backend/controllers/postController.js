@@ -1,13 +1,9 @@
 import Post from '../models/post';
 import Img from '../models/image';
 import User from '../models/user';
-import config from '../config/auth';
-import Datauri from 'datauri';
-import path from "path";
-import cloudinary from 'cloudinary';
 import validator from '../services/validator';
 import Category from '../models/category';
-
+import cloudinaryUpload from '../services/cloudinary';
 function index(req, res) {
     const orderBy = Post.getOrder(req.query.order);
     const page = req.query.page ? req.query.page : 1;
@@ -50,17 +46,16 @@ function show(req, res) {
 };
 
 function create(req, res) {
-    const keys = ['title', 'description', 'expire','category'];
+    const keys = ['title', 'description','reward', 'expire','category'];
     if (!validator(keys, req.body)) {
-        return res.json({ "message": "All fields required" });
+        return res.status(403).json({ "message": "All fields required" });
     }
-    const expire = new Date(req.body.expire);
-    const current = new Date();
-    if(current.getTime()>expire.getTime()){
-        return res.json({ "message": "Expire date must be in the future" });
+    if(req.body.expire<=0){
+        return res.status(403).json({ "message": "Expire must be a positive number of days" });
     }
-    let dUri = new Datauri();
-    cloudinary.config(config.cloudinary);
+    var expiry = new Date();
+    expiry.setDate(expiry.getDate() + req.body.expire);
+
     //using point to post
     let user = req.user;
     if (user.points < req.body.reward) {
@@ -72,18 +67,7 @@ function create(req, res) {
               return user.save();
             })
             .then((user) => {
-                return Img.saveImages(req.files, (file) => {
-                    dUri.format(path.extname(file.originalname).toString(), file.buffer);
-                    return cloudinary.uploader
-                        .upload(dUri.content)
-                        .then((img) => {
-                            return Img.create({
-                                url: img.url,
-                                format: img.format,
-                                type: img.resource_type
-                            });
-                        });
-                });
+                return Img.saveImages(req.files,cloudinaryUpload);
             })
             .then((images) => {
                 return Post.create({
@@ -91,7 +75,7 @@ function create(req, res) {
                     description: req.body.description,
                     reward: req.body.reward,
                     owner: req.user.id,
-                    expire: req.body.expire,
+                    expire: expiry.toString(),
                     category:req.body.category,
                     images: images
                 });

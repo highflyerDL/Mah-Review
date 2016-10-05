@@ -35,7 +35,6 @@ function googleCallback(req, res, next) {
 }
 
 function register(req, res) {
-    console.log(req.body);
     if (!req.body.name || !req.body.email || !req.body.password) {
         return sendJSONresponse(res, 400, {
             "message": "All fields required"
@@ -76,7 +75,7 @@ function login(req, res) {
                 token: token
             });
         }
-        return sendJSONresponse(res, 401, info);
+        return sendJSONresponse(res, 404, info);
     })(req, res);
 }
 export default { login, register, facebook, google, facebookCallback, googleCallback };
