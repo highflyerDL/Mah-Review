@@ -11,6 +11,8 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import {callFormDataApi} from '../util/callApi';
 import FlatButton from "material-ui/FlatButton";
+import CircularProgress from 'material-ui/CircularProgress';
+import {callbackSnackbar, loadingSnackbar} from "../util/snackbarFactory";
 
 const styles = {
   button: {
@@ -119,7 +121,13 @@ class CreatePostForm extends React.Component {
     formData.append('description', this.state.description);
     formData.append('reward', this.state.reward);
     formData.append('expire', this.state.expire);
-    callFormDataApi("post", formData, "POST").then((res)=>console.log(res), (err)=>console.log(err));
+    this.props.showSnackbar(loadingSnackbar())
+    callFormDataApi("post", formData, "POST").then((res)=>{
+      this.props.showSnackbar(callbackSnackbar("Post successfully published !"));
+      this.props.closeDialog();
+    }, (err)=>{
+      this.props.showSnackbar(callbackSnackbar(err.message.message));
+    });
   }
 
   render(){
@@ -189,16 +197,21 @@ export default class ActionBar extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.showDialog = this.showDialog.bind(this);
+    this.closeDialog = this.closeDialog.bind(this);
   }
 
   handleChange (event, index, value) {
     this.setState({value});
   } 
 
+  closeDialog(){
+    this.props.showDialog({}, true);
+  }
+
   showDialog(){
     const dialog = {
       title: "Create Post",
-      content: <CreatePostForm/>,
+      content: <CreatePostForm closeDialog={this.closeDialog} showSnackbar={this.props.showSnackbar}/>,
       actions: [<FlatButton label="Submit" primary={true} onTouchTap={()=>submitPostForm()}/>]
     }
     this.props.showDialog(dialog);
