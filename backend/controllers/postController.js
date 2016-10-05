@@ -1,15 +1,7 @@
 import Post from '../models/post';
 import Img from '../models/image';
 import User from '../models/user';
-<<<<<<< HEAD
-=======
 import Review from '../models/review';
-
-import config from '../config/auth';
-import Datauri from 'datauri';
-import path from "path";
-import cloudinary from 'cloudinary';
->>>>>>> master
 import validator from '../services/validator';
 import Category from '../models/category';
 import cloudinaryUpload from '../services/cloudinary';
