@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import chalk from "chalk";
 
 mongoose.Promise = require('bluebird');
-//code xida ai sua dc thi sua
 let url = "mongodb://localhost:27017/mern";
 if(process.env.NODE_ENV==="test"){
    url = "mongodb://mah:mah@ds033996.mlab.com:33996/heroku_38pb0k3r";
