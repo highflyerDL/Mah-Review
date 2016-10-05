@@ -58,7 +58,7 @@ class PostList extends Component {
   render() {
     return (
       <div>
-        <ActionBar showDialog={this.props.showDialog}/>
+        <ActionBar showDialog={this.props.showDialog} showSnackbar={this.props.showSnackbar}/>
         <div className="product-container">
           {data.map((product, index) => {
             return <Post title={product.title}

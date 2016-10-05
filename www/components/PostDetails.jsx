@@ -79,7 +79,7 @@ class PostDetails extends Component {
                           votes={review.votes}
                           isApproved={review.isApproved}/>
           })}
-          <Editor showSnackbar={this.props.showSnackbar}/>
+          <Editor showSnackbar={this.props.showSnackbar} postId={this.props.params.id}/>
         </div>
       </div>
     );

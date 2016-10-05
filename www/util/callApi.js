@@ -5,7 +5,7 @@ const api_url = "http://localhost:3000/api/";
 
 function callJsonApi(api, body, method="get"){
   return fetch(api_url+api, {
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', 'Authorization': getItemLocalStorage("token")},
     method,
     body: JSON.stringify(body)
   })
