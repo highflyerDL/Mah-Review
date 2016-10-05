@@ -12,14 +12,14 @@ let server = supertest(app);
 describe('Post controller', () => {
     var token,testCategory,testUser;
     before((done) => {
-        User.remove({}, (err) => {
-           done();
-        });
-        let user = new User();
-        user.name = "Test User";
-        user.email = "test@gmail.com";
-        user.setPassword("1234");
-        user.save().then((user)=>{
+        User.remove({}).then(()=>{
+          let user = new User();
+          user.name = "Test User";
+          user.email = "test@gmail.com";
+          user.setPassword("1234");
+          return user.save();
+        })
+        .then((user)=>{
           token=user.generateJwt();
           testUser=user;
           return Category.create({
@@ -29,7 +29,9 @@ describe('Post controller', () => {
         }).then((category)=>{
           testCategory=category;
           return Post.remove({});
-        }).catch((err)=>{
+        }).then(()=>{
+          done();
+        },done).catch((err)=>{
           done(err);
         });
     });
@@ -50,12 +52,13 @@ describe('Post controller', () => {
   });
   describe('/POST new post', () => {
       it('Post new post with data and correct token header without image', (done) => {
+          let catId=testCategory._id.toString();
           server.post('/api/post')
                 .set('Authorization',token)
                 .field('title', 'test')
                 .field('description', 'test description')
                 .field('expire',7)
-                .field('category',testCategory._id.toString())
+                .field('category',catId)
                 .field('reward',100)
                 .expect("Content-type",/json/)
                 .expect(200)
@@ -165,25 +168,27 @@ describe('Post controller', () => {
                 });
       });
       it('Correct id , token header ,user has permission', (done) => {
-          testUser.isAdmin=true;
-          testUser.save();
+
           const data = {
               title:"Another test",
               description:"Another test description",
               reward:10,
               expire:3
             };
-          server.put('/api/post/'+testPost._id)
-                .set('Authorization',token)
-                .send(data)
-                .expect(200)
-                .expect("Content-type",/json/)
-                .end(function(err,res){
-                  res.body.data.title.should.be.equal("Another test");
-                  res.body.data.description.should.be.equal("Another test description");
-                  res.body.data.reward.should.be.equal(10);
-                  done(err);
-                });
+          testUser.isAdmin=true;
+          testUser.save().then(()=>{
+            server.put('/api/post/'+testPost._id)
+                  .set('Authorization',token)
+                  .send(data)
+                  .expect(200)
+                  .expect("Content-type",/json/)
+                  .end(function(err,res){
+                    res.body.data.title.should.be.equal("Another test");
+                    res.body.data.description.should.be.equal("Another test description");
+                    res.body.data.reward.should.be.equal(10);
+                    done(err);
+                  });
+          });
       });
   });
 

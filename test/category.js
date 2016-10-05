@@ -11,18 +11,20 @@ let server = supertest(app);
 describe('Category controller', () => {
     var token;
     before((done) => {
-        User.remove({}, (err) => {
-           done();
-        });
-        let user = new User();
-        user.name = "Test User";
-        user.email = "test@gmail.com";
-        user.setPassword("1234");
-        user.save().then((user)=>{
+        User.remove({})
+        .then(()=>{
+          let user = new User();
+          user.name = "Test User";
+          user.email = "test@gmail.com";
+          user.setPassword("1234");
+          return user.save();
+        })
+        .then((user)=>{
           token=user.generateJwt();
           return Category.remove({});
-        }).catch((err)=>{
-          console.log(err);
+        }).then(()=>{
+          done();
+        },done).catch((err)=>{
           done(err);
         });
     });

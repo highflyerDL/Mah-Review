@@ -10,14 +10,16 @@ let server = supertest(app);
 
 describe('Authenthication', () => {
     before((done) => {
-        User.remove({}, (err) => {
-           done();
-        });
-        let user = new User();
-        user.name = "Test User";
-        user.email = "test@gmail.com";
-        user.setPassword("1234");
-        user.save().catch((err)=>{
+        User.remove({}).then(()=>{
+          let user = new User();
+          user.name = "Test User";
+          user.email = "test@gmail.com";
+          user.setPassword("1234");
+          return user.save();
+        }).then((user)=>{
+          done();
+        },done)
+        .catch((err)=>{
           done(err);
         });
     });

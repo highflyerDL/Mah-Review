@@ -7,24 +7,27 @@ var app=require('../index');
 let server = supertest(app);
 
 
-describe('Category controller', () => {
+describe('User controller', () => {
     var token,testUser;
     before((done) => {
-        User.remove({}, (err) => {
-           done();
-        });
-        let user = new User();
-        user.name = "Test User";
-        user.email = "test@gmail.com";
-        user.setPassword("1234");
-        user.save().then((user)=>{
+        User.remove({})
+        .then(()=>{
+          let user = new User();
+          user.name = "Test User";
+          user.email = "test@gmail.com";
+          user.setPassword("1234");
+          return user.save();
+        })
+        .then((user)=>{
           token=user.generateJwt();
           testUser=user;
-        }).catch((err)=>{
+          done();
+        },done).catch((err)=>{
           console.log(err);
           done(err);
         });
     });
+
   describe('/GET users', () => {
       it('Get user list successfully', (done) => {
           server.get('/api/user')
