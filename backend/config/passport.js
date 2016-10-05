@@ -58,7 +58,7 @@ passport.use(new FacebookStrategy({
                     };
                     newUser.name = profile.name.givenName + " " + profile.name.familyName; // look at the passport user profile to see how names are returned
                     newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-                    newUser.passhash = randomstring.generate();
+                    newUser.hash = randomstring.generate();
                     newUser.save(function(err) {
                         if (err)
                             throw err;

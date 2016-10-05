@@ -1,10 +1,6 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 let reviewSchema = new Schema({
-    __v: {
-        type: Number,
-        select: false
-    },
     content: {
         type: String,
         required: true

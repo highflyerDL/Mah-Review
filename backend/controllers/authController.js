@@ -22,7 +22,7 @@ function oauthCallback(name, req, res, next) {
     }, (err, user, info) => {
         let sessionToken = user.generateJwt();
         res.cookie('mycookie', sessionToken, { maxAge: 90000, httpOnly: false });
-        res.redirect('/');
+        res.redirect('/app');
     })(req, res, next);
 }
 

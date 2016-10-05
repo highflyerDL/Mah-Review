@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import Avatar from 'material-ui/Avatar';
 import Review from './Review';
 import Editor from './Editor';
+import {callQueryParamsApi} from "../util/callApi";
 
 var reviewMock = [
   {
@@ -26,8 +27,10 @@ var reviewMock = [
 ];
 
 class PostDetails extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    const postId = props.params.id;
+    callQueryParamsApi("post/"+postId, {}).then((res)=>console.log(res), (err)=>console.log(err));
   }
 
   render() {

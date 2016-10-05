@@ -6,10 +6,6 @@ import dotenv from "dotenv";
 const Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-    __v: {
-        type: Number,
-        select: false
-    },
     email: {
         type: String,
         unique: true,
@@ -44,7 +40,7 @@ var userSchema = new Schema({
 userSchema.statics.findByToken = function(token) {
     let decodedUser = jwt.verify(token, process.env.JWT_SECRET);
     if (decodedUser) {
-        return this.findOne({ _id: decodedUser._id });
+        return this.findOne({ _id: decodedUser._id }).select("-__v");
     } else {
         return Promise.resolve().then(function() {
             throw new Error('not a mongoose id');
@@ -54,8 +50,8 @@ userSchema.statics.findByToken = function(token) {
 userSchema.methods.canEdit = function(obj) {
     return this.isAdmin || this._id == obj.owner;
 }
-userSchema.methods.cannotEdit = function(password) {
-    return !this.canEdit;
+userSchema.methods.cannotEdit = function(obj) {
+    return !this.canEdit(obj);
 }
 userSchema.methods.setPassword = function(password) {
     this.salt = crypto.randomBytes(16).toString("hex");

@@ -12,6 +12,7 @@ function create(req, res) {
     }
     var newPost, newReview;
     return Post.findById(req.params.postId)
+        .select("-__v")
         .then((post) => {
             newPost = post;
             return Review.create({
@@ -37,6 +38,7 @@ function create(req, res) {
 function doAction(req, res) {
     var newReview;
     Review.findById(req.params.reviewId)
+        .select("-__v")
         .then((review) => {
             switch (req.params.action) {
                 case "upVote":
@@ -61,7 +63,7 @@ function doAction(req, res) {
 }
 
 function update(req, res) {
-    Review.findById(req.params.reviewId)
+    Review.findById(req.params.reviewId).select("-__v")
         .then((review) => {
             if (req.user.cannotEdit(review) || !req.body.content) {
                 return Promise.reject("Permission denied");
@@ -107,6 +109,7 @@ function downVote(review, user, res) {
 
 function approve(review, user, res) {
     return Post.findById(review.post)
+        .select("-__v")
         .then((post) => {
             if (post.owner == user._id || user.isAdmin) {
                 review.isApproved = true;
@@ -119,12 +122,13 @@ function approve(review, user, res) {
 function destroy(req, res) {
     var foundReview;
     Review.findById(req.params.reviewId)
+        .select("-__v")
         .then((review) => {
             if (req.user.cannotEdit(review)) {
                 return Promise.reject("Permission denied");
             }
             foundReview = review;
-            return Post.findById(review.post);
+            return Post.findById(review.post).select("-__v");
         }).then((post) => {
             let reviewIndex = post.reviews.indexOf(foundReview._id);
             post.reviews.splice(reviewIndex, 1);

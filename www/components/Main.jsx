@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import NavBar from "./NavBar";
 import Snackbar from 'material-ui/Snackbar';
 import FlatButton from "material-ui/FlatButton";
+import {getCookie, saveItemLocalStorage} from "../util/storageFactory";
 
 class Main extends Component {
   constructor(props) {
@@ -11,7 +12,7 @@ class Main extends Component {
       dialog: {
         title: "",
         open: false,
-        actions: null,
+        actions: [],
         content: null
       },
       snackbar: {
@@ -28,6 +29,10 @@ class Main extends Component {
     this.defaultActions = [
       <FlatButton label="Cancel" primary={true} onTouchTap={this.handleDialogClose} />
     ];
+    const token = getCookie("mycookie");
+    if(token){
+      saveItemLocalStorage("token", token);
+    }
   }
 
   handleDialogClose() {
@@ -45,7 +50,11 @@ class Main extends Component {
 
   onShowDialog(dialog) {
     dialog.open = true;
-    dialog.actions = this.defaultActions;
+    if(dialog.actions){
+      dialog.actions.push(this.defaultActions);
+    } else {
+      dialog.actions = this.defaultActions;
+    }
     this.setState({dialog: dialog});
   }
 
@@ -59,7 +68,8 @@ class Main extends Component {
       <div>
         <NavBar showDialog={this.onShowDialog} />
         {this.props.children && React.cloneElement(this.props.children, {
-          showSnackbar: this.onShowSnackbar
+          showSnackbar: this.onShowSnackbar,
+          showDialog: this.onShowDialog
         })}
         <Dialog title={this.state.dialog.title}
                 actions={this.state.dialog.actions}
