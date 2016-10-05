@@ -45,8 +45,17 @@ function update(req, res) {
 }
 
 function destroy(req, res) {
-    if (!requestIsValid(req, res)) return;
-    //delete
+    Category.findById(req.params.catId)
+        .then((category) => {
+            if (req.user.cannotEdit(category)) {
+                return Promise.reject("Permission denied");
+            }
+            return category.remove();
+        }).then((result) => {
+            if (result) return res.json({ message: "Category has been deleted." })
+        }).catch((err) => {
+            return res.status(404).json({ message: err });
+        })
 }
 
 export default { index, create, update, destroy };

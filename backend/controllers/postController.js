@@ -1,6 +1,8 @@
 import Post from '../models/post';
 import Img from '../models/image';
 import User from '../models/user';
+import Review from '../models/review';
+
 import config from '../config/auth';
 import Datauri from 'datauri';
 import path from "path";
@@ -121,8 +123,24 @@ function update(req, res) {
 }
 
 function destroy(req, res) {
-    if (!requestIsValid(req, res)) return;
-    //delete
+    var foundPost;
+
+    Post.findById(req.params.postId)
+        .then((post) => {
+            if (req.user.cannotEdit(post)) {
+                return Promise.reject("Permission denied");
+            }
+            foundPost = post;
+            return Review.remove({ _id: { "$in": post.reviews } });
+        }).then(() => {
+            return Img.remove({ _id: { "$in": foundPost.images } });
+        }).then(() => {
+            return foundPost.remove();
+        }).then((result) => {
+            if (result) return res.json({ message: "Post has been deleted." })
+        }).catch((err) => {
+            return res.status(404).json({ message: err });
+        })
 }
 
 export default { index, show, create, update, destroy };

@@ -33,7 +33,7 @@ router.get('/category', catCtrl.index);
 router.post('/category', auth, catCtrl.create);
 //need admin or owner validator
 router.put('/category/:catId', auth, catCtrl.update);
-router.delete('/category/:category', auth, catCtrl.destroy);
+router.delete('/category/:catId', auth, catCtrl.destroy);
 
 
 router.post('/post/:postId/review', auth, reviewCtrl.create);
