@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import callApi from '../util/callApi';
+import {callJsonApi} from '../util/callApi';
 
 class Auth extends Component {
   constructor() {
@@ -26,7 +26,7 @@ class Auth extends Component {
   onSubmit(e) {
     e.preventDefault();
     var body = {name: this.state.name, email: this.state.email, password: this.state.password};
-    callApi("register", "POST", body).then(res => console.log(res), res2=>console.log("error", res2));
+    callJsonApi("register", "POST", body).then(res => console.log(res), res2=>console.log("error", res2));
   }
 
   render() {
