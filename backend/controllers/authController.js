@@ -1,5 +1,6 @@
 import passport from "passport";
 import User from "../models/user";
+import Img from "../models/image";
 var sendJSONresponse = (res, status, content) => {
     res.status(status);
     res.json(content);
@@ -40,10 +41,12 @@ function register(req, res) {
             "message": "All fields required"
         });
     }
+    let url="https://robohash.org/"+req.body.email+".png"
     var user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
     user.setPassword(req.body.password);
+    user.avatar=url;
     user.save((err) => {
         var token;
         if (err) {

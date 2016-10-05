@@ -16,8 +16,7 @@ var userSchema = new Schema({
         required: true
     },
     avatar: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Image',
+        type: String,
     },
     isAdmin: {
         type: Boolean,

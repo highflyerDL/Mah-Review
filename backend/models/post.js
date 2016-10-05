@@ -92,7 +92,7 @@ postSchema.statics.getOrder = function(str) {
 }
 postSchema.statics.getPosts = function(query) {
     return this.find(query).select("-__v")
-        .populate([{ path: 'owner', select: 'name id' },
+        .populate([{ path: 'owner', select: 'name id avatar' },
             { path: 'images', select: 'url type format created' }
         ]);
 }

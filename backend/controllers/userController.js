@@ -13,7 +13,7 @@ function changeAvatar(req, res) {
     var avatar;
     cloudinaryUpload(req.file).then((img)=>{
       console.log(img);
-      req.user.avatar=img;
+      req.user.avatar=img.url;
       avatar=img;
       return req.user.save();
     }).then((user)=>{
