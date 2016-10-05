@@ -45,10 +45,6 @@ function update(req, res) {
 }
 
 function destroy(req, res) {
-    if (!req.params.catId) {
-        return res.json({ "message": "All fields required" });
-    }
-
     Category.findById(req.params.catId)
         .then((category) => {
             if (req.user.cannotEdit(category)) {

@@ -124,9 +124,6 @@ function update(req, res) {
 
 function destroy(req, res) {
     var foundPost;
-    if (!req.params.postId) {
-        return res.json({ "message": "All fields required" });
-    }
 
     Post.findById(req.params.postId)
         .then((post) => {
