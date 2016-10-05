@@ -33,7 +33,7 @@ function show(req, res) {
         .then((post) => {
             return User.populate(post, {
                 path: "reviews.owner",
-                select: "name",
+                select: "name avatar",
                 model: User
             });
         })
