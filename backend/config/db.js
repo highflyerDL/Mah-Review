@@ -3,16 +3,12 @@ import chalk from "chalk";
 
 mongoose.Promise = require('bluebird');
 let url = "mongodb://localhost:27017/mern";
-if(process.env.NODE_ENV==="test"){
-   url = "mongodb://mah:mah@ds033996.mlab.com:33996/heroku_38pb0k3r";
-}
 if (process.env.PORT) {
     url = "mongodb://mahteam:mahteam@ds033976.mlab.com:33976/heroku_xb01qh9s";
-    if(process.env.NODE_ENV==="test"){
-       url = "mongodb://mah:mah@ds033996.mlab.com:33996/heroku_38pb0k3r";
-    }
 }
-
+if(process.env.NODE_ENV==="test"){
+ url = "mongodb://mah:mah@ds033996.mlab.com:33996/heroku_38pb0k3r";
+}
 
 mongoose.connect(url);
 
