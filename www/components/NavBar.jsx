@@ -6,7 +6,6 @@ import AppBar from 'material-ui/AppBar';
 import { List, ListItem } from "material-ui/List";
 import { Link }from 'react-router';
 import { browserHistory } from 'react-router'
-import { origin } from "../util/configApp";
 
 function goOAuth(socnet){
   console.log("in oauth",socnet);
@@ -15,8 +14,8 @@ function goOAuth(socnet){
 
 const dialogContent =
   <List>
-    <a className="non-underline" href={origin+"api/google"}><ListItem primaryText="Sign in using Google account"/></a>
-    <a className="non-underline" href={origin+"api/facebook"}><ListItem primaryText="Sign in using Facebook account"/></a>
+    <a className="non-underline" href="api/google"><ListItem primaryText="Sign in using Google account"/></a>
+    <a className="non-underline" href="api/facebook"><ListItem primaryText="Sign in using Facebook account"/></a>
   </List>;
 
 class NavBar extends Component {

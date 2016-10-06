@@ -1,5 +1,6 @@
 import passport from "passport";
 import User from "../models/user";
+import Img from "../models/image";
 var sendJSONresponse = (res, status, content) => {
     res.status(status);
     res.json(content);
@@ -22,7 +23,7 @@ function oauthCallback(name, req, res, next) {
     }, (err, user, info) => {
         let sessionToken = user.generateJwt();
         res.cookie('mycookie', sessionToken, { maxAge: 90000, httpOnly: false });
-        res.redirect('/app');
+        res.redirect('/app/');
     })(req, res, next);
 }
 
@@ -35,16 +36,17 @@ function googleCallback(req, res, next) {
 }
 
 function register(req, res) {
-    console.log(req.body);
     if (!req.body.name || !req.body.email || !req.body.password) {
         return sendJSONresponse(res, 400, {
             "message": "All fields required"
         });
     }
+    let url="https://robohash.org/"+req.body.email+".png"
     var user = new User();
     user.name = req.body.name;
     user.email = req.body.email;
     user.setPassword(req.body.password);
+    user.avatar=url;
     user.save((err) => {
         var token;
         if (err) {
@@ -76,7 +78,7 @@ function login(req, res) {
                 token: token
             });
         }
-        return sendJSONresponse(res, 401, info);
+        return sendJSONresponse(res, 404, info);
     })(req, res);
 }
 export default { login, register, facebook, google, facebookCallback, googleCallback };
