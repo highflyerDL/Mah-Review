@@ -25,6 +25,10 @@ var postSchema = new Schema({
         type: Date,
         required: true
     },
+    isClosed:{
+       type:Boolean,
+       default:false
+    },
     owner: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'User',
@@ -46,7 +50,7 @@ postSchema.statics.findDetailById = function(id) {
             { path: 'images', select: 'url type format created' },
             { path: 'reviews', options: { sort: order } }
         ]);
-};
+}
 postSchema.statics.getQuery = function(params) {
     var today = new Date();
     let criteria = [{ expire: { $gte: today } }];
