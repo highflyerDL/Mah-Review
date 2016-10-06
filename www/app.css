@@ -25,6 +25,7 @@ body {
   position: relative;
   padding: 30px;
   vertical-align: top;
+  width:100%;
 }
 
 .upper-drawer {
@@ -84,8 +85,8 @@ body {
   }
 }
 
-#product-paper img {
-  display: block !important;
+.product-card img {
+  height:400px;
 }
 
 .product-container {
