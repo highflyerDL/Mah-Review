@@ -4,7 +4,8 @@ import ArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right';
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-left';
 import IconButton from 'material-ui/IconButton';
 import ActionBar from "./ActionBar";
-import {callQueryParamsApi} from '../util/callApi';
+import { callQueryParamsApi, callFormDataApi } from '../util/callApi';
+import { callbackSnackbar, loadingSnackbar } from "../util/snackbarFactory";
 
 const buttonStyle = {
   height: '100%',
@@ -16,7 +17,7 @@ const arrowStyle = {
   width: '100%',
   height: 'auto'
 };
-const data = [{
+var mockData = [{
   id: 1,
   img: 'http://placehold.it/350x150',
   title: 'Breakfast',
@@ -51,21 +52,43 @@ const data = [{
 class PostList extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: false };
-    callQueryParamsApi("post",{}).then((res)=>console.log(res),(err)=>console.log(err));
+    this.state = { data: [] };
+    this.onCreatePost = this.onCreatePost.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.showSnackbar(loadingSnackbar())
+    callQueryParamsApi("post", {})
+      .then((res) => {
+        this.state.data = res.data;
+        this.props.showSnackbar(callbackSnackbar("Posts successfully retrieved !"));
+      })
+      .catch((err) => {
+        this.props.showSnackbar(callbackSnackbar(err.message.message));
+      });
+  }
+
+  onCreatePost(formData){
+    this.props.showSnackbar(loadingSnackbar());
+    callFormDataApi("post", formData, "POST").then((res)=>{
+      this.props.showSnackbar(callbackSnackbar("Post successfully published !"));
+      this.props.showDialog({}, true);
+    }, (err)=>{
+      this.props.showSnackbar(callbackSnackbar(err.message));
+    });
   }
 
   render() {
     return (
       <div>
-        <ActionBar showDialog={this.props.showDialog} showSnackbar={this.props.showSnackbar}/>
+        <ActionBar showDialog={this.props.showDialog} showSnackbar={this.props.showSnackbar} onCreatePost={this.onCreatePost}/>
         <div className="product-container">
-          {data.map((product, index) => {
+          {this.state.data.map((product, index) => {
             return <Post title={product.title}
-                        author={product.author}
-                        img={product.img}
-                        key={product.id}
-                        id={product.id}
+                        author={product.owner.name}
+                        img={product.images[0].url}
+                        key={product._id}
+                        id={product._id}
                         index={index}/>
           })}
         </div>
