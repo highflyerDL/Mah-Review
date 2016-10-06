@@ -45,7 +45,26 @@ function show(req, res) {
             res.status(403).json({ message: err })
         });
 };
-
+function close(req,res){
+  Post.findDetailById(req.params.postId)
+      .select("-__v")
+      .then((post) => {
+          if(post.isClosed){
+            Promise.reject("Post already closed");
+          }
+          if(req.user.cannotEdit(post)){
+            Promise.reject("Permission denied");
+          }
+          post.isClosed=true;
+          return post.save();
+      })
+      .then((post) => {
+          res.json({ data: post });
+      })
+      .catch((err) => {
+          res.status(403).json({ message: err })
+      });
+}
 function create(req, res) {
     const keys = ['title', 'description','reward', 'expire','category'];
     if (!validator(keys, req.body)) {
@@ -132,7 +151,7 @@ function destroy(req, res) {
         })
 }
 
-export default { index, show, create, update, destroy };
+export default { index, show, create, update, destroy ,close};
 
 /*upload sample
 function upload(req,res){
