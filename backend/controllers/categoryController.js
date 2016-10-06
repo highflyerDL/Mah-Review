@@ -13,11 +13,13 @@ function create(req, res) {
     if (!req.body.name || !req.body.description) {
         return res.status(403).json({ message: "Missing fields" });
     }
+    /*
     //Only admin can add category ??????
     //Temporary
     if (!req.user.isAdmin) {
         return res.status(401).json({ message: "Permissions denied" });
     }
+    */
     Category.create({
         name: req.body.name,
         description: req.body.description
