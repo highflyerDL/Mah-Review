@@ -16,8 +16,7 @@ var userSchema = new Schema({
         required: true
     },
     avatar: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Image',
+        type: String,
     },
     isAdmin: {
         type: Boolean,
@@ -38,13 +37,17 @@ var userSchema = new Schema({
     salt: String
 });
 userSchema.statics.findByToken = function(token) {
-    let decodedUser = jwt.verify(token, process.env.JWT_SECRET);
+    let decodedUser={};
+    try {
+      decodedUser = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (e) {
+      return Promise.reject("Invalid token");
+    }
     if (decodedUser) {
+        //console.log(decodedUser._id);
         return this.findOne({ _id: decodedUser._id }).select("-__v");
     } else {
-        return Promise.resolve().then(function() {
-            throw new Error('not a mongoose id');
-        });
+        return Promise.reject("User not found");
     }
 };
 userSchema.methods.canEdit = function(obj) {

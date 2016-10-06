@@ -2,13 +2,9 @@ import Post from '../models/post';
 import Img from '../models/image';
 import User from '../models/user';
 import Review from '../models/review';
-
-import config from '../config/auth';
-import Datauri from 'datauri';
-import path from "path";
-import cloudinary from 'cloudinary';
 import validator from '../services/validator';
-
+import Category from '../models/category';
+import cloudinaryUpload from '../services/cloudinary';
 function index(req, res) {
     const orderBy = Post.getOrder(req.query.order);
     const page = req.query.page ? req.query.page : 1;
@@ -38,7 +34,7 @@ function show(req, res) {
         .then((post) => {
             return User.populate(post, {
                 path: "reviews.owner",
-                select: "name",
+                select: "name avatar",
                 model: User
             });
         })
@@ -51,53 +47,46 @@ function show(req, res) {
 };
 
 function create(req, res) {
-    const keys = ['title', 'description', 'expire'];
+    const keys = ['title', 'description','reward', 'expire','category'];
     if (!validator(keys, req.body)) {
-        return res.json({ "message": "All fields required" });
+        return res.status(403).json({ "message": "All fields required" });
     }
-    //set up cloudinary
-    console.log(req.files);
-    let dUri = new Datauri();
-    cloudinary.config(config.cloudinary);
+    if(req.body.expire<=0){
+        return res.status(403).json({ "message": "Expire must be a positive number of days" });
+    }
+    var expiry = new Date();
+    expiry.setDate(expiry.getDate() + req.body.expire);
+
     //using point to post
     let user = req.user;
     if (user.points < req.body.reward) {
         return res.status(403).json({ error: "You dont have enough points." });
     }
-    user.points = user.points - req.body.reward;
-    user.save()
-        .then((user) => {
-            return Img.saveImages(req.files, (file) => {
-                dUri.format(path.extname(file.originalname).toString(), file.buffer);
-                return cloudinary.uploader
-                    .upload(dUri.content)
-                    .then((img) => {
-                        return Img.create({
-                            url: img.url,
-                            format: img.format,
-                            type: img.resource_type,
-                            owner: req.user.id
-                        });
-                    });
+    Category.findById(req.body.category)
+            .then((category)=>{
+              user.points = user.points - req.body.reward;
+              return user.save();
+            })
+            .then((user) => {
+                return Img.saveImages(req.files,cloudinaryUpload);
+            })
+            .then((images) => {
+                return Post.create({
+                    title: req.body.title,
+                    description: req.body.description,
+                    reward: req.body.reward,
+                    owner: req.user.id,
+                    expire: expiry.toString(),
+                    category:req.body.category,
+                    images: images
+                });
+            })
+            .then((post) => {
+                res.json({ data: post });
+            })
+            .catch((err) => {
+                return res.status(403).json({ message: err });
             });
-        })
-        .then((images) => {
-            console.log(images);
-            return Post.create({
-                title: req.body.title,
-                description: req.body.description,
-                reward: req.body.reward,
-                owner: req.user.id,
-                expire: req.body.expire,
-                images: images
-            });
-        })
-        .then((post) => {
-            res.json({ data: post });
-        })
-        .catch((err) => {
-            return res.status(403).json({ message: err });
-        });
 
 }
 

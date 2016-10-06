@@ -42,7 +42,7 @@ var postSchema = new Schema({
 postSchema.statics.findDetailById = function(id) {
     let order = { vote: -1, created: -1 }
     return this.findById(id).select("-__v")
-        .populate([{ path: 'owner', select: 'name id' },
+        .populate([{ path: 'owner', select: 'name id avatar' },
             { path: 'images', select: 'url type format created' },
             { path: 'reviews', options: { sort: order } }
         ]);
@@ -92,7 +92,7 @@ postSchema.statics.getOrder = function(str) {
 }
 postSchema.statics.getPosts = function(query) {
     return this.find(query).select("-__v")
-        .populate([{ path: 'owner', select: 'name id' },
+        .populate([{ path: 'owner', select: 'name id avatar' },
             { path: 'images', select: 'url type format created' }
         ]);
 }
