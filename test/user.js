@@ -40,11 +40,11 @@ describe('User controller', () => {
                 });
       });
   });
-  describe('/POST new avatar', () => {
+  describe('/PUT new avatar', () => {
 
     /* Very expensive test case should be enable only when you are rich
     it('Post new avatar with data and correct token header', (done) => {
-    server.post('/api/user/avatar')
+    server.put('/api/user/avatar')
               .set('Authorization',token)
               .attach('avatar', 'test/resource/Xrina.png')
               .expect("Content-type",/json/)
@@ -56,9 +56,9 @@ describe('User controller', () => {
               });
     });
     */
-    it('Post new avatar with data and wrong token header', (done) => {
+    it('PUT new avatar with data and wrong token header', (done) => {
 
-        server.post('/api/user/avatar')
+        server.put('/api/user/avatar')
               .set('Authorization',"Chim to")
               .attach('avatar', 'test/resource/Xrina.png')
               .expect("Content-type",/json/)
@@ -69,13 +69,10 @@ describe('User controller', () => {
                 done(err);
               });
     });
-    it('Post new post with data without token header', (done) => {
+    it('PUT new avatar with data without token header', (done) => {
 
-        server.post('/api/post')
-              .field('title', 'test')
-              .field('description', 'test description')
-              .field('expire',7)
-              .field('reward',100)
+        server.put('/api/user/avatar')
+              .attach('avatar', 'test/resource/Xrina.png')
               .expect(401)
               .expect("Content-type",/json/)
               .end(function(err,res){
@@ -84,21 +81,7 @@ describe('User controller', () => {
                 done(err);
               });
     });
-    it('Right token header but miss data', (done) => {
-        const data = {
-          name: 'Test Post'
-          };
-        server.post('/api/post')
-              .set('Authorization',token)
-              .field('title', 'test')
-              .expect(403)
-              .expect("Content-type",/json/)
-              .end(function(err,res){
-                res.body.message.should.be.equal('All fields required');
-                //res.body.should.have.property("data");
-                done(err);
-              });
-    });
+
   });
   describe('/PUT update a user profile', () => {
       it('Right token header', (done) => {
