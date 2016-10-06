@@ -111,7 +111,7 @@ passport.use(new GoogleStrategy({
                     };
                     newUser.name = profile.displayName;
                     newUser.email = profile.emails[0].value; // pull the first email
-                    newUser.passhash = randomstring.generate();
+                    newUser.hash = randomstring.generate();
                     // save the user
                     newUser.save(function(err) {
                         if (err)

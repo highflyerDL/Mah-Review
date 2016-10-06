@@ -18,10 +18,6 @@ const imageSchema = mongoose.Schema({
     created: {
         type: Date,
         default: Date.now
-    },
-    owner: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'User',
     }
 });
 imageSchema.statics.saveImages = function(files, callback) {
