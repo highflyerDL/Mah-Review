@@ -9,10 +9,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
-import {callFormDataApi} from '../util/callApi';
+import {callFormDataApi, callQueryParamsApi} from '../util/callApi';
 import FlatButton from "material-ui/FlatButton";
 import CircularProgress from 'material-ui/CircularProgress';
 import {callbackSnackbar, loadingSnackbar} from "../util/snackbarFactory";
+import DebounceInput from 'react-debounce-input';
 
 const styles = {
   button: {
@@ -192,17 +193,34 @@ export default class ActionBar extends React.Component {
     super(props);
     this.state = {
       category: 1,
-      order: 1
-
+      order: 1,
+      keyword: ""
     };
+    this.queryObject = {
+      category: undefined,
+      order: undefined,
+      keyword: undefined
+    }
     this.handleChange = this.handleChange.bind(this);
     this.showDialog = this.showDialog.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
   }
 
-  handleChange (event, index, value) {
-    this.setState({value});
-  } 
+  handleChange (event, index, value, type) {
+    if(type=="keyword"){
+      value = event.target.value;
+    }
+    this.state[type] = value;
+    this.props.showSnackbar(loadingSnackbar())
+    this.queryObject[type] = value;
+    callQueryParamsApi("post",this.queryObject)
+      .then((res)=>{
+        this.setState(this.state);
+      })
+      .catch((err)=>{
+        this.props.showSnackbar(callbackSnackbar(err.message.message));
+      });
+  }
 
   closeDialog(){
     this.props.showDialog({}, true);
@@ -221,19 +239,17 @@ export default class ActionBar extends React.Component {
     return (
       <Toolbar style={{backgroundColor: 'rgb(243, 243, 243)'}}>
         <ToolbarGroup firstChild={true}>
-          <DropDownMenu value={this.state.category} onChange={this.handleChange}>
+          <DropDownMenu value={this.state.category} onChange={(e, index, val)=>this.handleChange(e,index,val,"category")}>
             <MenuItem value={1} primaryText="Category 1" />
             <MenuItem value={2} primaryText="Category 2" />
           </DropDownMenu>
-          <DropDownMenu value={this.state.order} onChange={this.handleChange}>
+          <DropDownMenu value={this.state.order} onChange={(e, index, val)=>this.handleChange(e,index,val,"order")}>
             <MenuItem value={1} primaryText="Newest" />
             <MenuItem value={2} primaryText="Popular" />
           </DropDownMenu>
         </ToolbarGroup>
         <ToolbarGroup>
-          <TextField
-            hintText="Search..."
-          />
+          <DebounceInput element={TextField} hintText="Search..." debounceTimeout={700} onChange={(e, index, val)=>this.handleChange(e,index,val,"keyword")} value={this.state.keyword}/>
           <FontIcon className="muidocs-icon-custom-sort" />
           <ToolbarSeparator />
           <RaisedButton label="Create Post" primary={true} onTouchTap={this.showDialog}/>
