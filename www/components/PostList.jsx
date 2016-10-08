@@ -52,16 +52,38 @@ var mockData = [{
 class PostList extends Component {
   constructor(props) {
     super(props);
-    this.state = { data: [] };
+    this.state = { postList: [] };
+    this.categoryList = [];
     this.onCreatePost = this.onCreatePost.bind(this);
+    this.onPostsRetrieve = this.onPostsRetrieve.bind(this);
+  }
+
+  onPostsRetrieve(postList){
+    this.state.postList = postList;
+    this.setState(this.state);
   }
 
   componentWillMount() {
-    this.props.showSnackbar(loadingSnackbar())
+    // this.props.showSnackbar(loadingSnackbar())
     callQueryParamsApi("post", {})
       .then((res) => {
-        this.state.data = res.data;
-        this.props.showSnackbar(callbackSnackbar("Posts successfully retrieved !"));
+        this.state.postList = res.data;
+        callQueryParamsApi("category", {})
+          .then((res)=>{
+            this.categoryList = res.data;
+            this.state.postList.forEach((post)=>{
+              this.categoryList.forEach((category)=>{
+                if(post.category == category._id){
+                  post.categoryName = category.name;
+                }
+              });
+            });
+            this.setState(this.state);
+          })
+          .catch((err)=>{
+            this.props.showSnackbar(callbackSnackbar(err.message));
+          });
+        // this.props.showSnackbar(callbackSnackbar("Posts successfully retrieved !"));
       })
       .catch((err) => {
         this.props.showSnackbar(callbackSnackbar(err.message.message));
@@ -81,14 +103,24 @@ class PostList extends Component {
   render() {
     return (
       <div>
-        <ActionBar showDialog={this.props.showDialog} showSnackbar={this.props.showSnackbar} onCreatePost={this.onCreatePost}/>
+        <ActionBar showDialog={this.props.showDialog} 
+                  showSnackbar={this.props.showSnackbar} 
+                  onCreatePost={this.onCreatePost}
+                  onPostsRetrieve={this.onPostsRetrieve}
+                  categoryList={this.categoryList}
+                  />
         <div className="product-container">
-          {this.state.data.map((product, index) => {
-            return <Post title={product.title}
-                        author={product.owner.name}
-                        img={product.images[0].url}
-                        key={product._id}
-                        id={product._id}
+          {this.state.postList.map((post, index) => {
+            return <Post title={post.title}
+                        author={post.owner.name}
+                        description={post.description}
+                        categoryName={post.categoryName}
+                        img={post.images[0].url}
+                        reward={post.reward}
+                        expire={post.expire}
+                        created={post.created}
+                        key={post._id}
+                        id={post._id}
                         index={index}/>
           })}
         </div>
