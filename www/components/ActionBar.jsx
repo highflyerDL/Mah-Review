@@ -45,12 +45,14 @@ class CreatePostForm extends React.Component {
       expire: 0,
       images: [],
       imageNames: [],
+      category: null,
       errors: {
         title: "",
         description: "",
         reward: "",
         expire: "",
-        images: ""
+        images: "",
+        category: ""
       }
     }
     this.handleChange = this.handleChange.bind(this);
@@ -60,7 +62,7 @@ class CreatePostForm extends React.Component {
   }
 
   handleChange(type, event, selectValue){
-    if(type == "expire"){
+    if(type == "expire" || type == "category"){
       this.state[type] = selectValue;
     } else {
       this.state[type] = event.target.value;
@@ -102,6 +104,12 @@ class CreatePostForm extends React.Component {
         this.state.errors.reward = "";
       }
     }
+    if(this.state.category == null){
+      isError = true;
+      this.state.errors.category = "Please choose one category";
+    } else {
+      this.state.errors.category = "";
+    }
     if(this.state.expire == 0){
       isError = true;
       this.state.errors.expire = "Please choose valid expiry period";
@@ -122,6 +130,7 @@ class CreatePostForm extends React.Component {
     formData.append('description', this.state.description);
     formData.append('reward', this.state.reward);
     formData.append('expire', this.state.expire);
+    formData.append('category', this.state.category);
     this.props.onCreatePost(formData);
   }
 
@@ -150,6 +159,16 @@ class CreatePostForm extends React.Component {
             hintText="Reward"
             onChange={(event)=>this.handleChange("reward", event)}
           />
+          <br />
+          <SelectField value={this.state.category} 
+                      onChange={(e, index, val)=>this.handleChange("category", e, val)}
+                      errorText={this.state.errors.category}
+                      >
+            <MenuItem value={null} primaryText="Choose category"/>
+            {this.props.categoryList.map((category)=>{
+              return <MenuItem key={category._id} value={category._id} primaryText={category.name} />
+            })}
+          </SelectField>
           <br />
           <SelectField value={this.state.expire} 
                       onChange={(event, index, value)=>this.handleChange("expire", event, value)}
@@ -219,7 +238,7 @@ export default class ActionBar extends React.Component {
   showDialog(){
     const dialog = {
       title: "Create Post",
-      content: <CreatePostForm onCreatePost={this.props.onCreatePost}/>,
+      content: <CreatePostForm categoryList={this.props.categoryList} onCreatePost={this.props.onCreatePost}/>,
       actions: [<FlatButton label="Submit" primary={true} onTouchTap={()=>submitPostForm()}/>]
     }
     this.props.showDialog(dialog);

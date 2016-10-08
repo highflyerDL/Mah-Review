@@ -3,7 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import NavBar from "./NavBar";
 import Snackbar from 'material-ui/Snackbar';
 import FlatButton from "material-ui/FlatButton";
-import {getCookie, saveItemLocalStorage} from "../util/storageFactory";
+import {getCookie, saveToken} from "../util/storageFactory";
 
 class Main extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class Main extends Component {
     ];
     const token = getCookie("mycookie");
     if(token){
-      saveItemLocalStorage("token", token);
+      saveToken(token);
     }
   }
 

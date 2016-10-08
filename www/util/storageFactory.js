@@ -21,4 +21,18 @@ function getItemLocalStorage(key){
     return localStorage.getItem(key);
 }
 
-export {getCookie, saveItemLocalStorage, getItemLocalStorage};
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace('-', '+').replace('_', '/');
+    return JSON.parse(window.atob(base64));
+};
+
+function saveToken(token){
+    saveItemLocalStorage("token", token);
+    const tokenObject = parseJwt(token);
+    saveItemLocalStorage("userId", tokenObject._id);
+    saveItemLocalStorage("userEmail", tokenObject.email);
+    saveItemLocalStorage("userName", tokenObject.name);
+}
+
+export {getCookie, saveToken, getItemLocalStorage};

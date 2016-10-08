@@ -6,6 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import ActionBar from "./ActionBar";
 import { callQueryParamsApi, callFormDataApi } from '../util/callApi';
 import { callbackSnackbar, loadingSnackbar } from "../util/snackbarFactory";
+import { getItemLocalStorage } from "../util/storageFactory";
 
 const buttonStyle = {
   height: '100%',
@@ -58,7 +59,7 @@ class PostList extends Component {
     this.onPostsRetrieve = this.onPostsRetrieve.bind(this);
   }
 
-  onPostsRetrieve(postList){
+  onPostsRetrieve(postList) {
     this.state.postList = postList;
     this.setState(this.state);
   }
@@ -69,18 +70,18 @@ class PostList extends Component {
       .then((res) => {
         this.state.postList = res.data;
         callQueryParamsApi("category", {})
-          .then((res)=>{
+          .then((res) => {
             this.categoryList = res.data;
-            this.state.postList.forEach((post)=>{
-              this.categoryList.forEach((category)=>{
-                if(post.category == category._id){
+            this.state.postList.forEach((post) => {
+              this.categoryList.forEach((category) => {
+                if (post.category == category._id) {
                   post.categoryName = category.name;
                 }
               });
             });
             this.setState(this.state);
           })
-          .catch((err)=>{
+          .catch((err) => {
             this.props.showSnackbar(callbackSnackbar(err.message));
           });
         // this.props.showSnackbar(callbackSnackbar("Posts successfully retrieved !"));
@@ -90,12 +91,14 @@ class PostList extends Component {
       });
   }
 
-  onCreatePost(formData){
+  onCreatePost(formData) {
     this.props.showSnackbar(loadingSnackbar());
-    callFormDataApi("post", formData, "POST").then((res)=>{
+    callFormDataApi("post", formData, "POST").then((res) => {
       this.props.showSnackbar(callbackSnackbar("Post successfully published !"));
+      res.data.owner.name = getItemLocalStorage("userName");
+      this.state.postList.unshift(res.data)
       this.props.showDialog({}, true);
-    }, (err)=>{
+    }, (err) => {
       this.props.showSnackbar(callbackSnackbar(err.message));
     });
   }
