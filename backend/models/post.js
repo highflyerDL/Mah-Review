@@ -95,19 +95,12 @@ postSchema.statics.getOrder = function(str) {
         return { "created": -1, "reward": -1 }
     }
     let orderBy = {};
-    let orders = str.split("*");
-    if (orders[orders.length - 1] === "asc") {
-        for (var i = 0; i < orders.length - 1; i++) {
-            orderBy[orders[i]] = 1;
-        }
-    } else {
-        for (var i = 0; i < orders.length; i++) {
-            if (orders[i] !== "dsc"){
-              orderBy[orders[i]] = -1;
-            }
-        }
-    }
-    console.log(orderBy);
+    let orders = str.split("|");
+    orders.map((order)=>{
+        const o=order.split("*");
+        orderBy[o[0]]=(o[1]=="asc")?1:-1;
+        return;
+    });
     return orderBy;
 }
 postSchema.statics.getPosts = function(query) {
