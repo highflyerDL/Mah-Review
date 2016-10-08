@@ -1,6 +1,14 @@
 import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
-var postSchema = new Schema({
+const schemaOptions = {
+    toObject: {
+      virtuals: true
+    }
+    ,toJSON: {
+      virtuals: true
+    }
+  };
+const postSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -41,8 +49,12 @@ var postSchema = new Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Review',
     }],
+},schemaOptions);
+postSchema.virtual('isExpired').get(function () {
+  const today = new Date().getTime();
+  const expire= new Date(this.expire).getTime();
+  return today>expire;
 });
-
 postSchema.statics.findDetailById = function(id) {
     let order = { vote: -1, created: -1 }
     return this.findById(id).select("-__v")
@@ -55,20 +67,22 @@ postSchema.statics.getQuery = function(params) {
     var today = new Date();
     let criteria = [{ expire: { $gte: today } }];
     for (let key in params) {
-        switch (key) {
-            case "title":
-                criteria.push({ 'title': new RegExp('.*' + params[key] + '.*', "i") });
-                break;
-            case "category":
-                criteria.push({ 'category': params[key] });
-                break;
-            case "description":
-                criteria.push({ 'description': new RegExp('.*' + params[key] + '.*', "i") });
-                break;
-            case "owner":
-                criteria.push({ 'owner': params[key] });
-                break;
-        }
+        if(params[key]){
+            switch (key) {
+                case "title":
+                    criteria.push({ 'title': new RegExp('.*' + params[key] + '.*', "i") });
+                    break;
+                case "category":
+                    criteria.push({ 'category': params[key] });
+                    break;
+                case "description":
+                    criteria.push({ 'description': new RegExp('.*' + params[key] + '.*', "i") });
+                    break;
+                case "owner":
+                    criteria.push({ 'owner': params[key] });
+                    break;
+            }
+      }
     }
     let query = "";
     if (criteria.length) {
