@@ -5,6 +5,9 @@ import Review from './Review';
 import Editor from './Editor';
 import { callQueryParamsApi, callJsonApi } from "../util/callApi";
 import {callbackSnackbar, loadingSnackbar} from "../util/snackbarFactory";
+import {dateFormat} from "../util/tools";
+import StarIcon from 'material-ui/svg-icons/toggle/star';
+import {yellow500} from "material-ui/styles/colors";
 
 var reviewMock = [{
   id: 1,
@@ -36,9 +39,21 @@ class PostDetails extends Component {
 
   componentWillMount() {
     callQueryParamsApi("post/" + this.postId, {})
-      .then((res) => {
-        this.setState({ post: res.data });
-        console.log(res);
+      .then((post) => {
+        callQueryParamsApi("category", {})
+          .then((res)=>{
+            this.state.post = post.data;
+            this.categoryList = res.data;
+            this.categoryList.forEach((category)=>{
+              if(this.state.post.category == category._id){
+                this.state.post.categoryName = category.name;
+              }
+            });
+            this.setState(this.state);
+          })
+          .catch((err)=>{
+            this.props.showSnackbar(callbackSnackbar(err.message));
+          });
       })
       .catch((err) => {
         console.log("error", err)
@@ -69,7 +84,7 @@ class PostDetails extends Component {
       slidesToScroll: 1
     };
     var DataNode = null;
-    console.log("in", this.state.post);
+
     if (this.state.post) {
       DataNode =
         <div>
@@ -84,9 +99,17 @@ class PostDetails extends Component {
               </Slider>
             </div>
             <div className='details-container'>
-              <h2>{this.state.post.title}</h2>
               <Avatar src="" size={30}/><span style={{position: 'absolute', marginLeft: '10px'}}>{this.state.post.owner.name}</span>
-              <div style={divStyle}><i>Published at {this.state.post.created}</i></div>
+              <h2>{this.state.post.title}</h2>
+              <div style={divStyle}><i>Published at {dateFormat(this.state.post.created)}</i></div>
+              <div style={divStyle}><b>Category: </b>{this.state.post.categoryName}</div>
+              <div style={divStyle}>
+                <b>Reward:</b> 
+                <span>
+                  <StarIcon style={{verticalAlign:"bottom"}} color={yellow500}/>
+                  <span>{this.state.post.reward}+</span>
+                </span>
+              </div>
               <div style={divStyle}><b>Description: </b>
                 {this.state.post.description}
               </div>

@@ -3,7 +3,15 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import RaisedButton from 'material-ui/RaisedButton';
 import {Link} from "react-router";
 import callApi from '../util/callApi';
+import {dateFormat} from "../util/tools";
+import StarIcon from 'material-ui/svg-icons/toggle/star';
+import {yellow500} from "material-ui/styles/colors";
+
+const Reward = (points)=>{
+  return <div><StarIcon color={yellow500}/><span>{points}+</span></div>
+}
 class Post extends Component {
+
   constructor() {
     super();
   }
@@ -21,20 +29,20 @@ class Post extends Component {
         <Card>
           <CardHeader
             title={this.props.author}
-            subtitle="Subtitle"
-            avatar=""
-          />
+            subtitle={"Published on "+dateFormat(this.props.created)}
+            avatar="">
+            <div style={{position:"absolute", top:"25px", right:"30px"}}><StarIcon color={yellow500}/>
+              <span style={{verticalAlign:"super"}}>{this.props.reward}+</span>
+            </div>
+          </CardHeader>
           <CardMedia
-            overlay={<CardTitle title={this.props.title} subtitle="Overlay subtitle" />}
+            overlay={<CardTitle title={this.props.title} subtitle={this.props.categoryName} />}
           >
             <img src={this.props.img} />
           </CardMedia>
-          <CardTitle title="Card title" subtitle="Card subtitle" />
+          <CardTitle subtitle={"Expired on "+dateFormat(this.props.expire)} />
           <CardText>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-            Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-            Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
+            {this.props.description}
           </CardText>
           <CardActions style={actionStyle}>
             <Link to={pathRoute}><RaisedButton label="View Details" primary={true}></RaisedButton></Link>

@@ -17,6 +17,7 @@
     "concurrently": "^2.2.0",
     "css-loader": "^0.25.0",
     "datauri": "^1.0.4",
+    "dateformat": "^1.0.12",
     "dotenv": "^2.0.0",
     "express": "latest",
     "isomorphic-fetch": "^2.2.1",
@@ -48,8 +49,8 @@
     "server": "nodemon ./index.js",
     "start": "concurrently --kill-others \"mongod\" \"npm run build\" \"npm run server\"",
     "start-server": "concurrently \"npm run build\" \"node ./index.js\"",
-    "test":"mocha --compilers js:babel-core/register ",
-    "report":"mocha --compilers js:babel-core/register --recursive -R xunit test/ > test-reports.xml"
+    "test": "mocha --compilers js:babel-core/register ",
+    "report": "mocha --compilers js:babel-core/register --recursive -R xunit test/ > test-reports.xml"
   },
   "devDependencies": {
     "mocha": "^3.1.0",

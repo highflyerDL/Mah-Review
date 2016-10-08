@@ -21,10 +21,17 @@ function callJsonApi(api, body, method="get"){
 
 function callQueryParamsApi(api, params, method="get"){
   var keys = Object.keys(params);
+  var paramsObject = {};
+  keys.map((key)=>{
+    if(params[key]!=null){
+      paramsObject[key] = params[key];
+    }
+  })
+  keys = Object.keys(paramsObject);
   var esc = encodeURIComponent;
   if(keys.length > 0){
     var query = keys
-        .map(k => esc(k) + '=' + esc(params[k]))
+        .map(k => esc(k) + '=' + esc(paramsObject[k]))
         .join('&');
     api += "?"+query;
   }
