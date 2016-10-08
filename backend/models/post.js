@@ -101,11 +101,13 @@ postSchema.statics.getOrder = function(str) {
             orderBy[orders[i]] = 1;
         }
     } else {
-        for (var i = 0; i < orders.length - 1; i++) {
-            if (orders[i] !== "dsc")
-                orderBy[orders[i]] = -1;
+        for (var i = 0; i < orders.length; i++) {
+            if (orders[i] !== "dsc"){
+              orderBy[orders[i]] = -1;
+            }
         }
     }
+    console.log(orderBy);
     return orderBy;
 }
 postSchema.statics.getPosts = function(query) {
