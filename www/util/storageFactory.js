@@ -35,4 +35,18 @@ function saveToken(token){
     saveItemLocalStorage("userName", tokenObject.name);
 }
 
-export {getCookie, saveToken, getItemLocalStorage};
+function getTokenInfo(prop){
+    const token = getItemLocalStorage("token");
+    if(!token){
+        return "";
+    }
+    const tokenObject = parseJwt(token);
+    const expiryDate = new Date(tokenObject.exp*1000);
+    const now = new Date();
+    if(expiryDate>now){
+        return tokenObject[prop];
+    }
+    return "";
+}
+
+export {getCookie, saveToken, getItemLocalStorage, getTokenInfo};
