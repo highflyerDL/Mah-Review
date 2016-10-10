@@ -8,7 +8,7 @@ import cloudinaryUpload from '../services/cloudinary';
 function index(req, res) {
     const orderBy = Post.getOrder(req.query.order);
     const page = req.query.page ? req.query.page : 1;
-    const limit = req.query.limit ? req.query.limit : 5;
+    const limit = req.query.limit ? req.query.limit : 6;
     const query = Post.getQuery(req.query);
     const Promise = require('bluebird');
     Promise.all([
