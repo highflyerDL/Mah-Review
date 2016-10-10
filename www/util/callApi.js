@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch';
 import {getItemLocalStorage} from "../util/storageFactory";
 
 // const api_url = "http://localhost:3000/api/";
-const api_url = "https://www.mahteam.tk/api/";
+const api_url = "http://www.mahteam.tk/api/";
 
 function callJsonApi(api, body, method="get"){
   return fetch(api_url+api, {
