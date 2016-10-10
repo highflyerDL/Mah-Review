@@ -67,4 +67,4 @@ function callFormDataApi(api, body, method="get"){
   });
 }
 
-export {callJsonApi, callQueryParamsApi, callFormDataApi};
+export {callJsonApi, callQueryParamsApi, callFormDataApi, api_url};

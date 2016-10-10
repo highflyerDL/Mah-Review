@@ -9,7 +9,7 @@ import AppBar from 'material-ui/AppBar';
 import { List, ListItem } from "material-ui/List";
 import { Link }from 'react-router';
 import { browserHistory } from 'react-router'
-import { origin } from "../util/configApp";
+import { api_url } from "../util/callApi.js";
 import { getTokenInfo } from "../util/storageFactory";
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import StarIcon from 'material-ui/svg-icons/toggle/star';
@@ -23,9 +23,9 @@ function goOAuth(socnet) {
 
 const dialogContent =
     <List>
-        <a className="non-underline" href={origin+"api/google"}><ListItem
+        <a className="non-underline" href={api_url+"google"}><ListItem
             primaryText="Sign in using Google account"/></a>
-        <a className="non-underline" href={origin+"api/facebook"}><ListItem
+        <a className="non-underline" href={api_url+"facebook"}><ListItem
             primaryText="Sign in using Facebook account"/></a>
     </List>;
 
