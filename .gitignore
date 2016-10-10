@@ -1,5 +1,6 @@
 node_modules
 www/bundle.js
 test-reports.xml
+npm-debug.log
 .idea
 *.iml
