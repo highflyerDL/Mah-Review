@@ -27,7 +27,7 @@ class Review extends Component {
         if(userId){
           Vote=<div><ul>
               <li>
-                  <IconButton onClick={() =>{item.onVoteUp(item.reviewId)}}>
+                  <IconButton onClick={() =>{item.onVote("upVote",item.reviewId)}}>
                       <KeyboardArrowUp/>
                   </IconButton>
               </li>
@@ -35,7 +35,7 @@ class Review extends Component {
                   {item.votes} votes
               </li>
               <li>
-                  <IconButton onClick={() => { item.onVoteDown(item.reviewId) }}>
+                  <IconButton onClick={() => { item.onVote("downVote",item.reviewId) }}>
                       <KeyboardArrowDown/>
                   </IconButton>
               </li>
