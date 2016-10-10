@@ -14,6 +14,7 @@ import { getTokenInfo } from "../util/storageFactory";
 import ArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import StarIcon from 'material-ui/svg-icons/toggle/star';
 import {yellow500} from "material-ui/styles/colors";
+import {clearLocalStorage} from "../util/storageFactory";
 
 function goOAuth(socnet) {
     console.log("in oauth", socnet);
@@ -36,6 +37,7 @@ class NavBar extends Component {
         this.showDialog = this.showDialog.bind(this);
         this.showPopover = this.showPopover.bind(this);
         this.handleClosePop = this.handleClosePop.bind(this);
+        this.doLogout = this.doLogout.bind(this);
     }
 
     handleToggle() {
@@ -44,16 +46,12 @@ class NavBar extends Component {
     }
 
     handleClose() {
-        this.setState({openDrawer: false})
+        this.setState({openDrawer: false});
     }
-
-;
 
     handleClosePop() {
-        this.setState({openPop: false})
+        this.setState({openPop: false});
     }
-
-;
 
     showDialog() {
         var dialog = {
@@ -73,11 +71,15 @@ class NavBar extends Component {
         });
     }
 
-;
+    doLogout() {
+        clearLocalStorage();
+        this.setState({openPop: false});
+    }
 
     render() {
         var AccountManagement;
         const username = getTokenInfo("name");
+        const profileUrl = getTokenInfo("profileUrl");
         if (username) {
             AccountManagement =
                 <div id="userManagement" style={{display: 'flex', alignItems: 'center'}}>
@@ -85,7 +87,7 @@ class NavBar extends Component {
                                 icon={<StarIcon color={yellow500}/>}/>
                     <FlatButton style={{color:'#FFFFFF'}} onTouchTap={this.showPopover} label={username}
                                 secondary={true}
-                                icon={<Avatar src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" size={30}/>}/>
+                                icon={<Avatar size={30}>{username[0]}</Avatar>}/>
                     <Popover
                         open={this.state.openPop}
                         anchorEl={this.state.anchorEl}
@@ -95,12 +97,15 @@ class NavBar extends Component {
 
                         <Menu>
                             <MenuItem primaryText="Settings"/>
-                            <MenuItem primaryText="Sign out"/>
+                            <MenuItem primaryText="Sign out" onTouchTap={this.doLogout}/>
                         </Menu>
                     </Popover>
                 </div>;
         } else {
-            AccountManagement = <FlatButton style={{color:'#FFFFFF'}} onTouchTap={this.showDialog} label='Sign in'/>;
+            AccountManagement =
+                <div id="userManagement" style={{display: 'flex', alignItems: 'center'}}>
+                    <FlatButton style={{color:'#FFFFFF'}} onTouchTap={this.showDialog} label='Sign in'/>
+                </div>;
         }
         return (
             <div id="navbar">
