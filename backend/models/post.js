@@ -98,7 +98,6 @@ postSchema.statics.getOrder = function(str) {
     let orders = str.split("|");
     orders.forEach((order)=>{
         const o=order.split("*");
-        console.log(o);
         orderBy[o[0]]=(o[1]=="asc")?1:-1;
         return;
     });
