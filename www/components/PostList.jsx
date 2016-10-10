@@ -7,6 +7,7 @@ import ActionBar from "./ActionBar";
 import { callQueryParamsApi, callFormDataApi } from '../util/callApi';
 import { callbackSnackbar, loadingSnackbar } from "../util/snackbarFactory";
 import { getItemLocalStorage } from "../util/storageFactory";
+import RaisedButton from 'material-ui/RaisedButton';
 
 const buttonStyle = {
   height: '100%',
@@ -53,10 +54,11 @@ var mockData = [{
 class PostList extends Component {
   constructor(props) {
     super(props);
-    this.state = { postList: [] };
+    this.state = { postList: [], hasMore: true, queryObject: {}, pageNumber: 1, pageLimit : 1 };
     this.categoryList = [];
     this.onCreatePost = this.onCreatePost.bind(this);
     this.onPostsRetrieve = this.onPostsRetrieve.bind(this);
+    this.loadMore = this.loadMore.bind(this);
   }
 
   onPostsRetrieve(postList) {
@@ -65,30 +67,7 @@ class PostList extends Component {
   }
 
   componentWillMount() {
-    // this.props.showSnackbar(loadingSnackbar())
-    callQueryParamsApi("post", {})
-      .then((res) => {
-        this.state.postList = res.data;
-        callQueryParamsApi("category", {})
-          .then((res) => {
-            this.categoryList = res.data;
-            this.state.postList.forEach((post) => {
-              this.categoryList.forEach((category) => {
-                if (post.category == category._id) {
-                  post.categoryName = category.name;
-                }
-              });
-            });
-            this.setState(this.state);
-          })
-          .catch((err) => {
-            this.props.showSnackbar(callbackSnackbar(err.message));
-          });
-        // this.props.showSnackbar(callbackSnackbar("Posts successfully retrieved !"));
-      })
-      .catch((err) => {
-        this.props.showSnackbar(callbackSnackbar(err.message.message));
-      });
+    this.loadMore();
   }
 
   onCreatePost(formData) {
@@ -103,13 +82,68 @@ class PostList extends Component {
     });
   }
 
+  loadMore(queryObject, isReset){
+    this.props.showSnackbar(loadingSnackbar());
+    if(isReset){
+      this.state.pageNumber = 1;
+    }
+    this.state.queryObject.page = this.state.pageNumber || 1;
+    if(queryObject){
+      this.state.queryObject = queryObject;
+    }
+    callQueryParamsApi("post", this.state.queryObject)
+      .then((postList) => {
+        if(!isReset){
+          postList.data.forEach((post)=>{
+            this.state.postList.push(post);
+          })
+        } else {
+          this.state.postList = postList.data;
+        }
+        this.state.pageLimit = postList.totalPage;
+        this.state.hasMore = this.state.pageNumber < this.state.pageLimit;
+        callQueryParamsApi("category", {})
+          .then((res) => {
+            this.categoryList = res.data;
+            this.state.postList.forEach((post) => {
+              this.categoryList.forEach((category) => {
+                if (post.category == category._id) {
+                  post.categoryName = category.name;
+                }
+              });
+            });
+            this.setState(this.state);
+            this.props.showSnackbar(callbackSnackbar("Posts successfully retrieved!"));
+          })
+          .catch((err) => {
+            this.props.showSnackbar(callbackSnackbar(err.message));
+          });
+      })
+      .catch((err) => {
+        this.props.showSnackbar(callbackSnackbar(err.message.message));
+      });
+  }
+
   render() {
+    var loadMoreButton;
+    if(this.state.pageNumber < this.state.pageLimit){
+      loadMoreButton =  
+        <RaisedButton label="Load more" secondary={true} 
+          style={{display: 'block', width: '200px', margin: '0 auto 50px auto', boxShadow: 'none'}}
+          onTouchTap={()=>{
+            console.log(this.state.pageNumber, this.state.pageLimit);
+            this.state.pageNumber++;
+            this.loadMore();
+          }}/>
+    } else {
+      loadMoreButton = null;
+    }
     return (
       <div>
         <ActionBar showDialog={this.props.showDialog} 
                   showSnackbar={this.props.showSnackbar} 
                   onCreatePost={this.onCreatePost}
-                  onPostsRetrieve={this.onPostsRetrieve}
+                  loadMore={this.loadMore}
                   categoryList={this.categoryList}
                   />
         <div className="product-container">
@@ -127,6 +161,7 @@ class PostList extends Component {
                         index={index}/>
           })}
         </div>
+        {loadMoreButton}
       </div>
     )
   }

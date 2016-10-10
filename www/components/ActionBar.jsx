@@ -225,14 +225,7 @@ export default class ActionBar extends React.Component {
     this.state[type] = value;
     // this.props.showSnackbar(loadingSnackbar())
     this.queryObject[type] = value;
-    callQueryParamsApi("post",this.queryObject)
-      .then((res)=>{
-        this.setState(this.state);
-        this.props.onPostsRetrieve(res.data);
-      })
-      .catch((err)=>{
-        this.props.showSnackbar(callbackSnackbar(err.message.message));
-      });
+    this.props.loadMore(this.queryObject, true);
   }
 
   showDialog(){
