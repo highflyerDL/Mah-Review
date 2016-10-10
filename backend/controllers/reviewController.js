@@ -14,6 +14,9 @@ function create(req, res) {
     return Post.findById(req.params.postId)
         .select("-__v")
         .then((post) => {
+            if(post.isClosed){
+              Promise.reject("Post is closed already");
+            }
             newPost = post;
             return Review.create({
                 content: req.body.content,
@@ -36,8 +39,7 @@ function create(req, res) {
 
 function doAction(req, res) {
     var newReview;
-    Review.findById(req.params.reviewId)
-        .select("-__v")
+    Review.findDetailById(req.params.reviewId)
         .then((review) => {
             switch (req.params.action) {
                 case "upVote":
@@ -62,8 +64,11 @@ function doAction(req, res) {
 }
 
 function update(req, res) {
-    Review.findById(req.params.reviewId).select("-__v")
+    Review.findDetailById(req.params.reviewId)
         .then((review) => {
+            if(review.post.isClosed){
+               return Promise.reject("Post closed already");
+            }
             if (req.user.cannotEdit(review) || !req.body.content) {
                 return Promise.reject("Permission denied");
             }

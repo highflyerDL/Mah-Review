@@ -36,7 +36,7 @@ describe('Post controller', () => {
         });
     });
   describe('/GET posts', () => {
-      it('Get posts successfully', (done) => {
+      it('should GET all posts successfully', (done) => {
           server.get('/api/post')
                 .expect("Content-type",/json/)
                 .expect(200)
@@ -51,7 +51,7 @@ describe('Post controller', () => {
       });
   });
   describe('/POST new post', () => {
-      it('Post new post with data and correct token header without image', (done) => {
+      it('should create new post with data and correct token header without image', (done) => {
           let catId=testCategory._id.toString();
           server.post('/api/post')
                 .set('Authorization',token)
@@ -69,7 +69,7 @@ describe('Post controller', () => {
                 });
       });
       /* Very expensive test case should be enable only when you are rich
-      it('Post new post with data and correct token header with image', (done) => {
+      it('should create new post with data and correct token header with image', (done) => {
           server.post('/api/post')
                 .set('Authorization',token)
                 .field('title', 'test')
@@ -88,7 +88,7 @@ describe('Post controller', () => {
                 });
       });
       */
-      it('Post new post with data and wrong token header', (done) => {
+      it('should response invalid because data and wrong token header', (done) => {
 
           server.post('/api/post')
                 .set('Authorization',"Chim to")
@@ -104,8 +104,7 @@ describe('Post controller', () => {
                   done(err);
                 });
       });
-      it('Post new post with data without token header', (done) => {
-
+      it('should response not authorized without token header', (done) => {
           server.post('/api/post')
                 .field('title', 'test')
                 .field('description', 'test description')
@@ -119,7 +118,7 @@ describe('Post controller', () => {
                   done(err);
                 });
       });
-      it('Right token header but miss data', (done) => {
+      it('should response error because of missing data', (done) => {
           const data = {
             name: 'Test Post'
             };
@@ -150,7 +149,7 @@ describe('Post controller', () => {
           done(err);
         });
       });
-      it('Correct id , token header wrong owner', (done) => {
+      it('should response permission denied because not owner', (done) => {
           const data = {
               title:"Another test",
               description:"Another test description",
@@ -167,8 +166,7 @@ describe('Post controller', () => {
                   done(err);
                 });
       });
-      it('Correct id , token header ,user has permission', (done) => {
-
+      it('should update post because user has permission', (done) => {
           const data = {
               title:"Another test",
               description:"Another test description",

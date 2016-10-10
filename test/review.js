@@ -43,7 +43,7 @@ describe('Review controller', () => {
     });
 
     describe('/GET reviews', () => {
-        it('Get reviews successfully', (done) => {
+        it('should GET reviews successfully', (done) => {
             server.get('/api/post/'+testPostId)
                   .expect("Content-type",/json/)
                   .expect(200)
@@ -54,7 +54,7 @@ describe('Review controller', () => {
         });
     });
     describe('/POST new review', () => {
-        it('Post new review with data and correct token header', (done) => {
+        it('should create new review because right data and correct token header', (done) => {
             const data = {
               content: 'A new review'
               };
@@ -69,7 +69,7 @@ describe('Review controller', () => {
                     done(err);
                   });
         });
-        it('Post new review with data and wrong token header', (done) => {
+        it('should response error because invalid token', (done) => {
             const data = {
               content: 'A new review'
               };
@@ -84,7 +84,7 @@ describe('Review controller', () => {
                     done(err);
                   });
         });
-        it('Post new review with data without token header', (done) => {
+        it('should response error because wrong token header', (done) => {
           const data = {
             content: 'A new review'
             };
@@ -98,7 +98,7 @@ describe('Review controller', () => {
                     done(err);
                   });
         });
-        it('Right token header but miss data', (done) => {
+        it('should response error because of missing data', (done) => {
             const data = {
               };
               server.post('/api/post/'+testPostId+'/review')
@@ -131,7 +131,7 @@ describe('Review controller', () => {
             done(err);
           });
         });
-        it('Correct category id , token header, no permission', (done) => {
+        it('should response error because no permissions', (done) => {
             const data = {
                 content:"Another review content"
               };
@@ -146,7 +146,7 @@ describe('Review controller', () => {
                     done(err);
                   });
         });
-        it('Correct id , token header ,user has permission', (done) => {
+        it('should update review with right permissions and data', (done) => {
             const data = {
                 content:"Another review content"
               };
