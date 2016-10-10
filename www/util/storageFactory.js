@@ -13,8 +13,17 @@ function getCookie(cname) {
     return "";
 }
 
+function deleteAllCookies() {
+    document.cookie = "";
+}
+
 function saveItemLocalStorage(key, value) {
-    localStorage.setItem(key, value );
+    localStorage.setItem(key, value);
+}
+
+function clearLocalStorage() {
+    deleteAllCookies();
+    localStorage.clear();
 }
 
 function getItemLocalStorage(key){
@@ -25,7 +34,7 @@ function parseJwt (token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace('-', '+').replace('_', '/');
     return JSON.parse(window.atob(base64));
-};
+}
 
 function saveToken(token){
     saveItemLocalStorage("token", token);
@@ -33,6 +42,7 @@ function saveToken(token){
     saveItemLocalStorage("userId", tokenObject._id);
     saveItemLocalStorage("userEmail", tokenObject.email);
     saveItemLocalStorage("userName", tokenObject.name);
+    saveItemLocalStorage("userProfile", tokenObject.profile);
 }
 
 function getTokenInfo(prop){
@@ -49,4 +59,4 @@ function getTokenInfo(prop){
     return "";
 }
 
-export {getCookie, saveToken, getItemLocalStorage, getTokenInfo};
+export {getCookie, saveToken, getItemLocalStorage, getTokenInfo, clearLocalStorage};

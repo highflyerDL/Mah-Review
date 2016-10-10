@@ -1,6 +1,6 @@
 var url = "http://localhost:3000/";
 if (process.env.PORT) {
-    url = "https://young-sierra-68180.herokuapp.com/";
+    url = "http://www.mahteam.tk/";
 }
 export default {
     'facebookAuth': {

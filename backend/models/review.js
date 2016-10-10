@@ -34,4 +34,9 @@ let reviewSchema = new Schema({
         ref: 'Post',
     }
 });
+reviewSchema.statics.findDetailById = function(id) {
+    return this.findById(id)
+              .select("-__v")
+              .populate([{ path: 'post', select: 'isClosed' }]);
+}
 export default mongoose.model('Review', reviewSchema);

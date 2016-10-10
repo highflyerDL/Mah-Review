@@ -34,13 +34,12 @@ passport.use(new FacebookStrategy({
         clientID: config.facebookAuth.API_ID,
         clientSecret: config.facebookAuth.API_SECRET,
         callbackURL: config.facebookAuth.CALLBACK_URL,
-        profileFields: ['id', 'emails', 'name']
+        profileFields: ['id', 'emails', 'name','gender','photos']
 
     },
     // facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
         // asynchronous
-        console.log("facbook");
         process.nextTick(function() {
             // find the user in the database based on their facebook id
             User.findOne({ $or: [{ 'facebook.id': profile.id }, { 'email': profile.emails[0].value }] }, function(err, user) {
@@ -59,6 +58,7 @@ passport.use(new FacebookStrategy({
                     newUser.name = profile.name.givenName + " " + profile.name.familyName; // look at the passport user profile to see how names are returned
                     newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
                     newUser.hash = randomstring.generate();
+                    newUser.avatar=profile.photos.length?profile.photos[0].value:undefined;
                     newUser.save(function(err) {
                         if (err)
                             throw err;

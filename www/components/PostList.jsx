@@ -10,46 +10,46 @@ import { getItemLocalStorage } from "../util/storageFactory";
 import RaisedButton from 'material-ui/RaisedButton';
 
 const buttonStyle = {
-  height: '100%',
-  float: 'left',
-  width: '100%'
+    height: '100%',
+    float: 'left',
+    width: '100%'
 };
 
 const arrowStyle = {
-  width: '100%',
-  height: 'auto'
+    width: '100%',
+    height: 'auto'
 };
 var mockData = [{
-  id: 1,
-  img: 'http://placehold.it/350x150',
-  title: 'Breakfast',
-  author: 'jill111',
+    id: 1,
+    img: 'http://placehold.it/350x150',
+    title: 'Breakfast',
+    author: 'jill111',
 }, {
-  id: 2,
-  img: 'http://placehold.it/350x150',
-  title: 'Tasty burger',
-  author: 'pashminu',
+    id: 2,
+    img: 'http://placehold.it/350x150',
+    title: 'Tasty burger',
+    author: 'pashminu',
 }, {
-  id: 3,
-  img: 'http://placehold.it/350x150',
-  title: 'Camera',
-  author: 'Danson67',
+    id: 3,
+    img: 'http://placehold.it/350x150',
+    title: 'Camera',
+    author: 'Danson67',
 }, {
-  id: 4,
-  img: 'http://placehold.it/350x150',
-  title: 'Morning',
-  author: 'fancycrave1',
+    id: 4,
+    img: 'http://placehold.it/350x150',
+    title: 'Morning',
+    author: 'fancycrave1',
 }, {
-  id: 5,
-  img: 'http://placehold.it/350x150',
-  title: 'Hats',
-  author: 'Hans',
+    id: 5,
+    img: 'http://placehold.it/350x150',
+    title: 'Hats',
+    author: 'Hans',
 }, {
-  id: 6,
-  img: 'http://placehold.it/350x150',
-  title: 'Honey',
-  author: 'fancycravel',
-}, ];
+    id: 6,
+    img: 'http://placehold.it/350x150',
+    title: 'Honey',
+    author: 'fancycravel',
+},];
 
 class PostList extends Component {
   constructor(props) {
@@ -57,13 +57,7 @@ class PostList extends Component {
     this.state = { postList: [], hasMore: true, queryObject: {}, pageNumber: 1, pageLimit : 1 };
     this.categoryList = [];
     this.onCreatePost = this.onCreatePost.bind(this);
-    this.onPostsRetrieve = this.onPostsRetrieve.bind(this);
     this.loadMore = this.loadMore.bind(this);
-  }
-
-  onPostsRetrieve(postList) {
-    this.state.postList = postList;
-    this.setState(this.state);
   }
 
   componentWillMount() {

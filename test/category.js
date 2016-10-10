@@ -29,7 +29,7 @@ describe('Category controller', () => {
         });
     });
   describe('/GET categories', () => {
-      it('Get category successfully', (done) => {
+      it('should GET category successfully', (done) => {
           server.get('/api/category')
                 .expect("Content-type",/json/)
                 .expect(200)
@@ -40,7 +40,7 @@ describe('Category controller', () => {
       });
   });
   describe('/POST new category', () => {
-      it('Post new category with data and correct token header', (done) => {
+      it('should post new category with data and correct token header', (done) => {
           const data = {
             name: 'Test category',
             description: 'Something lorem ipsum'
@@ -56,7 +56,7 @@ describe('Category controller', () => {
                   done(err);
                 });
       });
-      it('Post new category with data and wrong token header', (done) => {
+      it('should post new category with data and wrong token header', (done) => {
           const data = {
             name: 'Test category',
             description: 'Something lorem ipsum'
@@ -72,7 +72,7 @@ describe('Category controller', () => {
                   done(err);
                 });
       });
-      it('Post new category with data without token header', (done) => {
+      it('should post new category with data without token header', (done) => {
           const data = {
             name: 'Test category',
             description: 'Something lorem ipsum'
@@ -87,7 +87,7 @@ describe('Category controller', () => {
                   done(err);
                 });
       });
-      it('Right token header but miss data', (done) => {
+      it('should right token header but miss data', (done) => {
           const data = {
             name: 'Test category'
             };

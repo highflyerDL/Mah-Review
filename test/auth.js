@@ -24,7 +24,7 @@ describe('Authenthication', () => {
         });
     });
   describe('/POST register new user', () => {
-      it('Register successfully and get token', (done) => {
+      it('should register successfully and get token', (done) => {
         let data = {
           name: 'Minh Cao',
           password: 'minhkunho',
@@ -39,7 +39,7 @@ describe('Authenthication', () => {
                   done(err);
                 });
       });
-      it('Register failed because duplicated email', (done) => {
+      it('should failed because duplicated email', (done) => {
         let data = {
           name: 'Minh Cao',
           password: 'minhkunho',
@@ -54,7 +54,7 @@ describe('Authenthication', () => {
                   done(err);
                 });
       });
-      it('Register failed because missing fields', (done) => {
+      it('should failed because missing fields', (done) => {
         let data = {
           name: 'Minh Cao'
           };
@@ -70,7 +70,7 @@ describe('Authenthication', () => {
   });
 
   describe('/POST login', () => {
-    it('Login successfully with right credencials', (done) => {
+    it('should login successfully with right credencials', (done) => {
       let data = {
         password: '1234',
         email: 'test@gmail.com'
@@ -84,7 +84,7 @@ describe('Authenthication', () => {
                 done(err);
               });
     });
-    it('Login failed with wrong password', (done) => {
+    it('should login failed with wrong password', (done) => {
       let data = {
         password: 'Minhkunho',
         email: 'test@gmail.com'

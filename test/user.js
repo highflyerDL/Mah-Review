@@ -29,7 +29,7 @@ describe('User controller', () => {
     });
 
   describe('/GET users', () => {
-      it('Get user list successfully', (done) => {
+      it('should GET user list successfully', (done) => {
           server.get('/api/user')
                 .set('Authorization',token)
                 .expect("Content-type",/json/)
@@ -43,7 +43,7 @@ describe('User controller', () => {
   describe('/PUT new avatar', () => {
 
     /* Very expensive test case should be enable only when you are rich
-    it('Post new avatar with data and correct token header', (done) => {
+    it('should update avatar with data and correct token header', (done) => {
     server.put('/api/user/avatar')
               .set('Authorization',token)
               .attach('avatar', 'test/resource/Xrina.png')
@@ -56,7 +56,7 @@ describe('User controller', () => {
               });
     });
     */
-    it('PUT new avatar with data and wrong token header', (done) => {
+    it('should response error because wrong auth token', (done) => {
 
         server.put('/api/user/avatar')
               .set('Authorization',"Chim to")
@@ -69,7 +69,7 @@ describe('User controller', () => {
                 done(err);
               });
     });
-    it('PUT new avatar with data without token header', (done) => {
+    it('should not update avatar because missing token header', (done) => {
 
         server.put('/api/user/avatar')
               .attach('avatar', 'test/resource/Xrina.png')
@@ -84,7 +84,7 @@ describe('User controller', () => {
 
   });
   describe('/PUT update a user profile', () => {
-      it('Right token header', (done) => {
+      it('should update user profile with right token and data', (done) => {
           const data = {
               name:"Another name",
               email:"Another email"
