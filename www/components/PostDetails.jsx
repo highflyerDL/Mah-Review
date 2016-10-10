@@ -40,20 +40,9 @@ class PostDetails extends Component {
     componentWillMount() {
         callQueryParamsApi("post/" + this.postId, {})
             .then((post) => {
-                callQueryParamsApi("category", {})
-                    .then((res)=> {
-                        this.state.post = post.data;
-                        this.categoryList = res.data;
-                        this.categoryList.forEach((category)=> {
-                            if (this.state.post.category == category._id) {
-                                this.state.post.categoryName = category.name;
-                            }
-                        });
-                        this.setState(this.state);
-                    })
-                    .catch((err)=> {
-                        this.props.showSnackbar(callbackSnackbar(err.message));
-                    });
+                this.state.post = post.data;
+                this.state.post.categoryName = post.data.category.name;
+                this.setState(this.state);
             })
             .catch((err) => {
                 console.log("error", err)

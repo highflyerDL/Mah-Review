@@ -73,11 +73,7 @@ class PostList extends Component {
                     .then((res) => {
                         this.categoryList = res.data;
                         this.state.postList.forEach((post) => {
-                            this.categoryList.forEach((category) => {
-                                if (post.category == category._id) {
-                                    post.categoryName = category.name;
-                                }
-                            });
+                            post.categoryName = post.category.name;
                         });
                         this.setState(this.state);
                     })
