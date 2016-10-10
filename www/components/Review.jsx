@@ -4,7 +4,9 @@ import Divider from 'material-ui/Divider';
 import KeyboardArrowUp from 'material-ui/svg-icons/hardware/keyboard-arrow-up';
 import KeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
 import Star from 'material-ui/svg-icons/toggle/star';
+import Done from 'material-ui/svg-icons/action/done';
 import IconButton from 'material-ui/IconButton';
+import { getTokenInfo } from "../util/storageFactory";
 
 class Review extends Component {
     constructor() {
@@ -13,9 +15,35 @@ class Review extends Component {
 
     render() {
         const item = this.props;
-        var Approved;
+        var Approved,Vote;
+        var userId=getTokenInfo("_id");
         if (item.isApproved) {
             Approved = <div className="star"><Star style={{color: '#0077cc', fontSize: '18px'}}/><i>Approved</i></div>
+        }else if(item.postOwner._id==userId){
+            Approved = <div className="star"><IconButton onClick={() => { item.onApprove(item.reviewId) }}>
+                          <Done/>
+                      </IconButton></div>;
+        }
+        if(userId){
+          Vote=<div><ul>
+              <li>
+                  <IconButton onClick={() =>{item.onVoteUp(item.reviewId)}}>
+                      <KeyboardArrowUp/>
+                  </IconButton>
+              </li>
+              <li style={{textAlign: 'center'}}>
+                  {item.votes} votes
+              </li>
+              <li>
+                  <IconButton onClick={() => { item.onVoteDown(item.reviewId) }}>
+                      <KeyboardArrowDown/>
+                  </IconButton>
+              </li>
+          </ul></div>
+        }else{
+          Vote=<div><li style={{textAlign: 'center'}}>
+              {item.votes} votes
+          </li></div>
         }
         return (
             <div style={{paddingBottom: '70px'}}>
@@ -24,21 +52,7 @@ class Review extends Component {
                     <tbody>
                     <tr>
                         <td>
-                            <ul>
-                                <li>
-                                    <IconButton>
-                                        <KeyboardArrowUp/>
-                                    </IconButton>
-                                </li>
-                                <li style={{textAlign: 'center'}}>
-                                    {item.votes} votes
-                                </li>
-                                <li>
-                                    <IconButton>
-                                        <KeyboardArrowDown/>
-                                    </IconButton>
-                                </li>
-                            </ul>
+                            {Vote}
                         </td>
                         <td id="review-content">
                             {Approved}

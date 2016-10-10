@@ -59,7 +59,50 @@ class PostDetails extends Component {
                 console.log("error", err)
             });
     }
+    onReviewApprove(reviewId){
+        callJsonApi(`review/${reviewId}/approve`, {}, "POST")
+            .then((res) => {
+                this.state.post.reviews=this.state.post.reviews.map((review)=>{
+                    if(review._id === reviewId)
+                        review.isApproved=true;
+                    return review;
+                });
+                this.setState(this.state);
+            })
+            .catch((err) => {
+                this.props.showSnackbar(callbackSnackbar(err.message.message));
+            });
+    }
+    onReviewVoteUp(reviewId){
+        callJsonApi(`review/${reviewId}/upVote`, {}, "POST")
+            .then((res) => {
+                this.state.post.reviews=this.state.post.reviews.map((review)=>{
+                    if(review._id === reviewId)
+                        review = res.data;
+                    return review;
+                });
+                this.setState(this.state);
 
+            })
+            .catch((err) => {
+                this.props.showSnackbar(callbackSnackbar(err.message.message));
+            });
+    }
+    onReviewVoteDown(reviewId){
+        callJsonApi(`review/${reviewId}/downVote`, {}, "POST")
+            .then((res) => {
+                this.state.post.reviews=this.state.post.reviews.map((review)=>{
+                    if(review._id === reviewId)
+                        review = res.data;
+                    return review;
+                });
+                this.setState(this.state);
+
+            })
+            .catch((err) => {
+                this.props.showSnackbar(callbackSnackbar(err.message.message));
+            });
+    }
     onSubmit(message) {
         callJsonApi("post/" + this.postId + "/review", {content: message}, "POST")
             .then((res) => {
@@ -122,12 +165,17 @@ class PostDetails extends Component {
                         <h1>Reviews</h1>
                         {this.state.post.reviews.map((review)=> {
                             return <Review key={review._id}
+                                           reviewId={review._id}
                                            title={review.title}
                                            author={review.owner.name}
                                            date={review.created}
                                            content={review.content}
                                            votes={review.vote}
-                                           isApproved={review.isApproved}/>
+                                           isApproved={review.isApproved}
+                                           postOwner={this.state.post.owner}
+                                           onVoteUp={this.onReviewVoteUp.bind(this)}
+                                           onApprove={this.onReviewApprove.bind(this)}
+                                           onVoteDown={this.onReviewVoteDown.bind(this)}/>
                         })}
                         <Editor onSubmit={this.onSubmit} postId={this.props.params.id}
                                 showSnackbar={this.props.showSnackbar}/>

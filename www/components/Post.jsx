@@ -22,7 +22,7 @@ class Post extends Component {
         const actionStyle = {
             textAlign: 'center'
         };
-        const pathRoute = "app/post/" + this.props.id;
+        const pathRoute = "/app/post/" + this.props.id;
 
         return (
             <div className={cardStyle}>
