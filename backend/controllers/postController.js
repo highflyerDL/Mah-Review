@@ -49,13 +49,15 @@ function close(req,res){
   Post.findDetailById(req.params.postId)
       .select("-__v")
       .then((post) => {
-          if(post.isClosed){
-            Promise.reject("Post already closed");
+          if(post.isExpired){
+            Promise.reject("Post already expired");
           }
           if(req.user.cannotEdit(post)){
             Promise.reject("Permission denied");
           }
-          post.isClosed=true;
+          const newExpire = new Date();
+          newExpire.setDate(newExpire.getDate() -2);
+          post.expire=newExpire;
           return post.save();
       })
       .then((post) => {
