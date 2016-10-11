@@ -24,7 +24,7 @@ router.put('/user', auth, userCtrl.update);
 //router.post('/upload',auth,upload.array('files'),postCtrl.upload);
 router.get('/post', postCtrl.index);
 router.get('/post/:postId', postCtrl.show);
-router.post('/post/:postId/close', postCtrl.close);
+router.post('/post/:postId/close', auth,postCtrl.close);
 router.post('/post/', auth, upload.array('files'), postCtrl.create);
 //need admin or owner validator
 router.put('/post/:postId', auth, postCtrl.update);

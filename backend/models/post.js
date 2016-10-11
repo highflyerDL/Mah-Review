@@ -33,10 +33,6 @@ const postSchema = new Schema({
         type: Date,
         required: true
     },
-    isClosed:{
-       type:Boolean,
-       default:false
-    },
     owner: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'User',
