@@ -100,11 +100,7 @@ class PostList extends Component {
           .then((res) => {
             this.categoryList = res.data;
             this.state.postList.forEach((post) => {
-              this.categoryList.forEach((category) => {
-                if (post.category == category._id) {
-                  post.categoryName = category.name;
-                }
-              });
+                post.categoryName = post.category.name;
             });
             this.setState(this.state);
             this.props.showSnackbar(callbackSnackbar("Posts successfully retrieved!"));
@@ -121,8 +117,8 @@ class PostList extends Component {
   render() {
     var loadMoreButton;
     if(this.state.pageNumber < this.state.pageLimit){
-      loadMoreButton =  
-        <RaisedButton label="Load more" secondary={true} 
+      loadMoreButton =
+        <RaisedButton label="Load more" secondary={true}
           style={{display: 'block', width: '200px', margin: '0 auto 50px auto', boxShadow: 'none'}}
           onTouchTap={()=>{
             console.log(this.state.pageNumber, this.state.pageLimit);
@@ -134,8 +130,8 @@ class PostList extends Component {
     }
     return (
       <div>
-        <ActionBar showDialog={this.props.showDialog} 
-                  showSnackbar={this.props.showSnackbar} 
+        <ActionBar showDialog={this.props.showDialog}
+                  showSnackbar={this.props.showSnackbar}
                   onCreatePost={this.onCreatePost}
                   loadMore={this.loadMore}
                   categoryList={this.categoryList}

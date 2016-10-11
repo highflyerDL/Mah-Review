@@ -54,11 +54,9 @@ function doAction(req, res) {
             }
         })
         .then((review) => {
-            console.log("wtf", review);
             res.json({ data: review });
         })
         .catch((err) => {
-            console.log(err);
             res.status(400).json({ message: err });
         });
 }
@@ -103,7 +101,7 @@ function downVote(review, user, res) {
     }
     const upVoteIdx = review.upVoter.indexOf(user._id);
     if (upVoteIdx != -1) {
-        review.downVoter.splice(upVoteIdx, 1);
+        review.upVoter.splice(upVoteIdx, 1);
         review.vote = review.vote - 1;
     }
     review.downVoter.push(user._id);
@@ -115,7 +113,7 @@ function approve(review, user, res) {
     return Post.findById(review.post)
         .select("-__v")
         .then((post) => {
-            if (post.owner == user._id || user.isAdmin) {
+            if (user.canEdit(post)) {
                 review.isApproved = true;
                 return review.save();
             }

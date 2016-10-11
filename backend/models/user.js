@@ -51,7 +51,7 @@ userSchema.statics.findByToken = function(token) {
     }
 };
 userSchema.methods.canEdit = function(obj) {
-    return this.isAdmin || this._id == obj.owner;
+    return this.isAdmin || this._id.equals(obj.owner);
 }
 userSchema.methods.cannotEdit = function(obj) {
     return !this.canEdit(obj);

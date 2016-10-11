@@ -60,6 +60,7 @@ postSchema.statics.findDetailById = function(id) {
     return this.findById(id).select("-__v")
         .populate([{ path: 'owner', select: 'name id avatar' },
             { path: 'images', select: 'url type format created' },
+            { path: 'category', select: 'id name' },
             { path: 'reviews', options: { sort: order } }
         ]);
 }
@@ -106,7 +107,8 @@ postSchema.statics.getOrder = function(str) {
 postSchema.statics.getPosts = function(query) {
     return this.find(query).select("-__v")
         .populate([{ path: 'owner', select: 'name id avatar' },
-            { path: 'images', select: 'url type format created' }
+            { path: 'images', select: 'url type format created' },
+            { path: 'category', select: 'id name' }
         ]);
 }
 
