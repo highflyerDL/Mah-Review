@@ -12,7 +12,6 @@ class Editor extends Component {
     }
 
     onEditorSubmit() {
-        this.props.showSnackbar(loadingSnackbar());
         this.props.onSubmit(this.state.reviewMessage);
         this.setState({reviewMessage: ""});
     }

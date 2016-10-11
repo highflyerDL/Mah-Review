@@ -15,14 +15,20 @@ class Review extends Component {
 
     render() {
         const item = this.props;
-        var Approved,Vote;
+        var Approved,Vote,ApproveAction;
         var userId=getTokenInfo("_id");
         if (item.isApproved) {
             Approved = <div className="star"><Star style={{color: '#0077cc', fontSize: '18px'}}/><i>Approved</i></div>
-        }else if(item.postOwner._id==userId){
-            Approved = <div className="star"><IconButton onClick={() => { item.onApprove(item.reviewId) }}>
-                          <Done/>
-                      </IconButton></div>;
+        }else if(item.postOwner._id==userId && item.authorId!=userId){
+            ApproveAction = 
+            <div style=
+                  {{position: 'absolute',
+                  top: '-12px'}}>
+              <IconButton onClick={() => { item.onApprove(item.reviewId) }}
+                 iconStyle={{color: 'rgba(27, 197, 0, 0.870588)', width:'30px', height:'30px'}}>
+                  <Done/>
+              </IconButton>
+            </div>;
         }
         if(userId){
           Vote=<div><ul>
@@ -39,14 +45,19 @@ class Review extends Component {
                       <KeyboardArrowDown/>
                   </IconButton>
               </li>
-          </ul></div>
+              <li style={{position:'relative'}}>
+                {ApproveAction}
+              </li>
+          </ul></div>;
         }else{
-          Vote=<div><li style={{textAlign: 'center'}}>
-              {item.votes} votes
-          </li></div>
+          Vote=<div>
+                <li style={{textAlign: 'center'}}>
+                    {item.votes} votes
+                </li>
+              </div>
         }
         return (
-            <div style={{paddingBottom: '70px'}}>
+            <div style={{paddingBottom: '50px'}}>
                 <Divider/>
                 <table>
                     <tbody>

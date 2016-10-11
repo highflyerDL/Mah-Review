@@ -8,6 +8,7 @@ import {callbackSnackbar, loadingSnackbar} from "../util/snackbarFactory";
 import {dateFormat} from "../util/tools";
 import StarIcon from 'material-ui/svg-icons/toggle/star';
 import {yellow500} from "material-ui/styles/colors";
+import {getTokenInfo} from "../util/storageFactory";
 
 var reviewMock = [{
     id: 1,
@@ -59,7 +60,7 @@ class PostDetails extends Component {
                 this.setState(this.state);
             })
             .catch((err) => {
-                this.props.showSnackbar(callbackSnackbar(err.message.message));
+                this.props.showSnackbar(callbackSnackbar(err.message));
             });
     }
     onReviewVote(type="upVote",reviewId){
@@ -67,25 +68,27 @@ class PostDetails extends Component {
             .then((res) => {
                 this.state.post.reviews=this.state.post.reviews.map((review)=>{
                     if(review._id === reviewId)
-                        review = res.data;
+                        review.vote = res.data.vote;
                     return review;
                 });
                 this.setState(this.state);
 
             })
             .catch((err) => {
-                this.props.showSnackbar(callbackSnackbar(err.message.message));
+                this.props.showSnackbar(callbackSnackbar(err.message));
             });
     }
     onSubmit(message) {
+        this.props.showSnackbar(loadingSnackbar());
         callJsonApi("post/" + this.postId + "/review", {content: message}, "POST")
             .then((res) => {
+                res.data.owner = {name: getTokenInfo("name"), _id: res.data.owner};
                 this.state.post.reviews.unshift(res.data)
                 this.setState(this.state);
                 this.props.showSnackbar(callbackSnackbar("Review posted!"));
             })
             .catch((err) => {
-                this.props.showSnackbar(callbackSnackbar(err.message.message));
+                this.props.showSnackbar(callbackSnackbar(err.message));
             });
     }
 
@@ -142,6 +145,7 @@ class PostDetails extends Component {
                                            reviewId={review._id}
                                            title={review.title}
                                            author={review.owner.name}
+                                           authorId={review.owner._id}
                                            date={review.created}
                                            content={review.content}
                                            votes={review.vote}
