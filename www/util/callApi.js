@@ -1,20 +1,15 @@
 import fetch from 'isomorphic-fetch';
 import { getItemLocalStorage } from "../util/storageFactory";
 
-var url = "http://localhost:3000/api/";
-if (process.env.PORT) {
-    url = "http://www.mahteam.tk/api/";
-}
-
-const api_url = url;
+const api_url = "http://www.mahteam.tk/api/";
 
 function callJsonApi(api, body, method = "get") {
     return fetch(api_url + api, {
-        headers: {'content-type': 'application/json', 'Authorization': getItemLocalStorage("token")},
-        method,
-        body: JSON.stringify(body)
-    })
-        .then(response => response.json().then(json => ({json, response})))
+            headers: { 'content-type': 'application/json', 'Authorization': getItemLocalStorage("token") },
+            method,
+            body: JSON.stringify(body)
+        })
+        .then(response => response.json().then(json => ({ json, response })))
         .then(({ json, response }) => {
             if (!response.ok) {
                 return Promise.reject(json);
@@ -41,10 +36,10 @@ function callQueryParamsApi(api, params, method = "get") {
         api += "?" + query;
     }
     return fetch(api_url + api, {
-        headers: {},
-        method
-    })
-        .then(response => response.json().then(json => ({json, response})))
+            headers: {},
+            method
+        })
+        .then(response => response.json().then(json => ({ json, response })))
         .then(({ json, response }) => {
             if (!response.ok) {
                 return Promise.reject(json);
@@ -56,13 +51,13 @@ function callQueryParamsApi(api, params, method = "get") {
 
 function callFormDataApi(api, body, method = "get") {
     return fetch(api_url + api, {
-        headers: {
-            "Authorization": getItemLocalStorage("token")
-        },
-        method,
-        body: body
-    })
-        .then(response => response.json().then(json => ({json, response})))
+            headers: {
+                "Authorization": getItemLocalStorage("token")
+            },
+            method,
+            body: body
+        })
+        .then(response => response.json().then(json => ({ json, response })))
         .then(({ json, response }) => {
             if (!response.ok) {
                 return Promise.reject(json);
