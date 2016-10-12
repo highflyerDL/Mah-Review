@@ -1,7 +1,8 @@
-{
+[{
     "hash": "iB1m1nsRIo3NUg3mAhpBGrvFYKY3VQ8H",
     "email": "beochot@gmail.com",
     "name": "Phan Huy",
+    "avatar": "https://robohash.org/Huy.png",
     "_id": {
         "$oid": "57f38635224b2c5b7ce2e3cf"
     },
@@ -10,11 +11,12 @@
         "$date": 1475577397321
     },
     "__v": 0
-} {
+},{
     "hash": "1078a0ea86da4b0b74b6677724b8c240850d7c7b90beeed73d7c3390d6885c080d25d1d648e85c73de2b5b04f3842574d293a40333c8500786731708221a2ec0",
     "salt": "40605b468ea4a19892b3646c901ca9b3",
     "email": "admin@admin.com",
     "name": "Super Admin",
+    "avatar": "https://robohash.org/Admin.png",
     "_id": {
         "$oid": "57f38ed00c00075c640f3e6b"
     },
@@ -23,11 +25,12 @@
         "$date": 1475579600413
     },
     "__v": 0
-} {
+},{
     "hash": "32ba17fe1d3f6e11284167a1a52ac3eceea98151602343865122247c71c8f63388b4db0a3d365b1027e24d1cca823e0012f17880b3937e1e0df56b4657502780",
     "salt": "f426b712c52c42fb7fb034d43152c0f1",
     "email": "pt@gmail.com",
     "name": "Pekka Anderson",
+    "avatar": "https://robohash.org/Pekka.png",
     "_id": {
         "$oid": "57f391cf5c03ae61c0c615fc"
     },
@@ -36,11 +39,12 @@
         "$date": 1475580367224
     },
     "__v": 0
-} {
+},{
     "hash": "9641d8fc0116cac18e1d8a0e7edabf006d05abb2a4c43a30fac56778ea479426d724ef22afb1c7407b49f17ae8be84825a633376f0cd7c32a584c1bb5f93f0e3",
     "salt": "7719ff5cec444a5c7db98006eb7b5520",
     "email": "huyphan@gmail.com",
     "name": "Huy Phan",
+    "avatar": "https://robohash.org/Phan.png",
     "_id": {
         "$oid": "57f4018f785002796fae8ed5"
     },
@@ -49,11 +53,12 @@
         "$date": 1475608975005
     },
     "__v": 0
-} {
+},{
     "hash": "216108e226dbfcb1310b861ece63935923d1b29e263ce9e192b0daa1a465338b4510247345980607c01f8590d08f40c07f85451274857017d69483b2cc60f683",
     "salt": "81bb7b17cba73cd577f34a2c9b2d6645",
     "email": "anhpham@gmail.com",
     "name": "Anh Pham",
+    "avatar": "https://robohash.org/Anh.png",
     "_id": {
         "$oid": "57f4019b785002796fae8ed6"
     },
@@ -62,11 +67,12 @@
         "$date": 1475608987460
     },
     "__v": 0
-} {
+},{
     "hash": "ea18aa8de01a93058ad4de46c78d44123ae5a2f8d3d727cabc4ee7dc98f8503b7104fe71bcb07f5c134e5879853e336239a80a6a36651753eba8be7b626006c2",
     "salt": "b19396b325911e2248aa66c58ae9f374",
     "email": "minhcao@gmail.com",
     "name": "Minh Cao",
+    "avatar": "https://robohash.org/Minh.png",
     "_id": {
         "$oid": "57f401ac785002796fae8ed7"
     },
@@ -75,4 +81,4 @@
         "$date": 1475609004516
     },
     "__v": 0
-}
+}]

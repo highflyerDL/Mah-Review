@@ -1,4 +1,4 @@
-{
+[{
     "url": "https://robohash.org/Allie.png",
     "format": "jpg",
     "type": "image",
@@ -9,7 +9,7 @@
         "$date": 1475579778786
     },
     "__v": 0
-} {
+},{
     "url": "https://robohash.org/Corina.png",
     "format": "jpg",
     "type": "image",
@@ -20,7 +20,7 @@
         "$date": 1475580073883
     },
     "__v": 0
-} {
+},{
     "url": "https://robohash.org/Smith.png",
     "format": "jpg",
     "type": "image",
@@ -31,7 +31,7 @@
         "$date": 1475580121097
     },
     "__v": 0
-} {
+},{
     "url": "https://robohash.org/Helga.png",
     "format": "jpg",
     "type": "image",
@@ -42,7 +42,7 @@
         "$date": 1475580221908
     },
     "__v": 0
-} {
+},{
     "url": "http://res.cloudinary.com/dk7k5oewl/image/upload/v1475609321/ftjokivodv1fanctdopn.png",
     "format": "png",
     "type": "image",
@@ -53,7 +53,7 @@
         "$date": 1475609321596
     },
     "__v": 0
-} {
+},{
     "url": "http://res.cloudinary.com/dk7k5oewl/image/upload/v1475609321/rx4cmk7u7bcnccazng8v.jpg",
     "format": "jpg",
     "type": "image",
@@ -64,7 +64,7 @@
         "$date": 1475609321668
     },
     "__v": 0
-} {
+},{
     "url": "http://res.cloudinary.com/dk7k5oewl/image/upload/v1475609321/e1luwu1iytfbykft6rka.jpg",
     "format": "jpg",
     "type": "image",
@@ -75,7 +75,7 @@
         "$date": 1475609321687
     },
     "__v": 0
-} {
+},{
     "url": "http://res.cloudinary.com/dk7k5oewl/image/upload/v1475609321/zfmrrkr4y0oftrpghraw.jpg",
     "format": "jpg",
     "type": "image",
@@ -86,7 +86,7 @@
         "$date": 1475609321720
     },
     "__v": 0
-} {
+},{
     "url": "http://res.cloudinary.com/dk7k5oewl/image/upload/v1475609321/vbtlznsls3pumvp2euhm.jpg",
     "format": "jpg",
     "type": "image",
@@ -97,7 +97,7 @@
         "$date": 1475609321729
     },
     "__v": 0
-} {
+},{
     "url": "http://res.cloudinary.com/dk7k5oewl/image/upload/v1475609321/y58qavqazpybqq16k0fn.jpg",
     "format": "jpg",
     "type": "image",
@@ -108,7 +108,7 @@
         "$date": 1475609321943
     },
     "__v": 0
-} {
+},{
     "url": "http://res.cloudinary.com/dk7k5oewl/image/upload/v1475609442/v71vpsa2i093bch6ezzl.jpg",
     "format": "jpg",
     "type": "image",
@@ -119,7 +119,7 @@
         "$date": 1475609443092
     },
     "__v": 0
-} {
+},{
     "url": "http://res.cloudinary.com/dk7k5oewl/image/upload/v1475609442/ihc7ajux2usgfkablwth.jpg",
     "format": "jpg",
     "type": "image",
@@ -130,7 +130,7 @@
         "$date": 1475609443115
     },
     "__v": 0
-} {
+},{
     "url": "http://res.cloudinary.com/dk7k5oewl/image/upload/v1475609442/fnbxf4jp93jlyz2rdyvc.jpg",
     "format": "jpg",
     "type": "image",
@@ -141,4 +141,4 @@
         "$date": 1475609443294
     },
     "__v": 0
-}
+}]

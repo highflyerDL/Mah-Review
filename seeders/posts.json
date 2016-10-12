@@ -1,4 +1,4 @@
-{
+[{
     "__v": 0,
     "_id": {
         "$oid": "57f38f290c00075c640f3e6d"
@@ -30,7 +30,7 @@
     }],
     "reward": 10,
     "title": "My design for 22nd motor"
-} {
+} ,{
     "__v": 0,
     "_id": {
         "$oid": "57f38f825c03ae61c0c615f5"
@@ -68,7 +68,7 @@
     }],
     "reward": 10,
     "title": "My design for 22nd motor"
-} {
+} ,{
     "__v": 0,
     "_id": {
         "$oid": "57f390a95c03ae61c0c615f7"
@@ -98,7 +98,7 @@
     }],
     "reward": 5,
     "title": "Galaxy S7 explosion"
-} {
+},{
     "__v": 0,
     "_id": {
         "$oid": "57f390d95c03ae61c0c615f9"
@@ -132,7 +132,7 @@
     }],
     "reward": 15,
     "title": "Iphone 7S"
-} {
+},{
     "__v": 0,
     "_id": {
         "$oid": "57f3913d5c03ae61c0c615fb"
@@ -164,7 +164,7 @@
     }],
     "reward": 25,
     "title": "My new garden"
-} {
+},{
     "__v": 0,
     "_id": {
         "$oid": "57f402e9785002796fae8eea"
@@ -206,7 +206,7 @@
     }],
     "reward": 2,
     "title": "Summer festa"
-} {
+},{
     "__v": 0,
     "_id": {
         "$oid": "57f40363785002796fae8eef"
@@ -242,4 +242,4 @@
     }],
     "reward": 22,
     "title": "Raspberry Iot idea"
-}
+}]
