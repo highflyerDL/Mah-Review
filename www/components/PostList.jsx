@@ -140,6 +140,7 @@ class PostList extends Component {
           {this.state.postList.map((post, index) => {
             return <Post title={post.title}
                         author={post.owner.name}
+                        avatar={post.owner.avatar}
                         description={post.description}
                         categoryName={post.categoryName}
                         img={post.images[0].url}

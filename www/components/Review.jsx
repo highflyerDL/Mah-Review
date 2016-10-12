@@ -78,7 +78,7 @@ class Review extends Component {
                                     posted<span> {item.date}</span>
 
                                     <div style={{marginTop:'8px'}}>
-                                        <Avatar src="" size={30}/><span
+                                        <Avatar src={item.authorAvatar} style={{backgroundColor: 'white'}} size={30}/><span
                                         style={{position: 'absolute', marginLeft: '10px', fontSize: '16px', color: '#07C', fontWeight: 900}}>{item.author}</span>
                                     </div>
                                 </div>

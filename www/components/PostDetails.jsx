@@ -119,7 +119,7 @@ class PostDetails extends Component {
                             </Slider>
                         </div>
                         <div className='details-container'>
-                            <Avatar src="" size={30}/><span
+                            <Avatar src={this.state.post.owner.avatar} style={{backgroundColor: 'white'}} size={30}/><span
                             style={{position: 'absolute', marginLeft: '10px'}}>{this.state.post.owner.name}</span>
 
                             <h2>{this.state.post.title}</h2>
@@ -145,6 +145,7 @@ class PostDetails extends Component {
                                            reviewId={review._id}
                                            title={review.title}
                                            author={review.owner.name}
+                                           authorAvatar={review.owner.avatar}
                                            authorId={review.owner._id}
                                            date={review.created}
                                            content={review.content}

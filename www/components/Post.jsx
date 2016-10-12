@@ -6,6 +6,7 @@ import callApi from '../util/callApi';
 import {dateFormat} from "../util/tools";
 import StarIcon from 'material-ui/svg-icons/toggle/star';
 import {yellow500} from "material-ui/styles/colors";
+import Avatar from 'material-ui/Avatar';
 
 const Reward = (points)=> {
     return <div><StarIcon color={yellow500}/><span>{points}+</span></div>
@@ -23,6 +24,7 @@ class Post extends Component {
             textAlign: 'center'
         };
         const pathRoute = "/app/post/" + this.props.id;
+        const OwnerAvatar = <Avatar src={this.props.avatar} style={{backgroundColor: 'white'}}/>
 
         return (
             <div className={cardStyle}>
@@ -30,7 +32,7 @@ class Post extends Component {
                     <CardHeader
                         title={this.props.author}
                         subtitle={"Published on "+dateFormat(this.props.created)}
-                        avatar="">
+                        avatar={OwnerAvatar}>
                         <div style={{position:"absolute", top:"25px", right:"30px"}}><StarIcon color={yellow500}/>
                             <span style={{verticalAlign:"super"}}>{this.props.reward}+</span>
                         </div>
