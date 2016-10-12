@@ -48,7 +48,7 @@
     "dev": "webpack-dev-server --progress --inline --hot",
     "server": "nodemon ./index.js",
     "start": "concurrently --kill-others \"mongod\" \"npm run build\" \"npm run server\"",
-    "start-server": "concurrently \"npm run build\" \"node ./index.js\"",
+    "start-server": "concurrently \"webpack\" \"node ./index.js\"",
     "test": "mocha --compilers js:babel-core/register ",
     "report": "mocha --compilers js:babel-core/register --recursive -R xunit test/ > test-reports.xml"
   },

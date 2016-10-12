@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
+var PROD = JSON.parse(process.env.PORT || '0');
 var webpackConfig = {
   entry: [
     // 'webpack-dev-server/client?http://localhost:8080',
@@ -25,9 +26,11 @@ var webpackConfig = {
       }
     ]
   },
-  // plugins: [
-  //   new webpack.HotModuleReplacementPlugin()
-  // ],
+  plugins: PROD ? [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false }
+    }) 
+    ] : [],
   resolve: {
     extensions: ['', '.js', '.jsx', '.css', '.scss'], // what file extensions babel looks for in imports
     root: path.resolve(__dirname), // absolute imports
