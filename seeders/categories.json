@@ -1,43 +1,43 @@
-{
+[{
     "_id": {
         "$oid": "57f38e443172255ec525edb2"
     },
     "name": "Collectibles & Art",
     "description": "Sint ex qui magna qui consectetur in labore do dolore mollit. Commodo irure sunt et cupidatat commodo qui pariatur elit deserunt officia voluptate mollit velit. Laboris elit cillum laboris aute aliqua tempor commodo. Aliquip minim occaecat proident in veniam ex do ea irure. Velit quis ea excepteur aute esse adipisicing enim eiusmod laboris aliqua qui. Eu aliqua laboris ex mollit."
-} {
+},{
     "_id": {
         "$oid": "57f38e443172255ec525edb3"
     },
     "name": "Electronics",
     "description": "Eu velit labore commodo quis consequat labore do aliqua elit anim ullamco ut. Aute minim Lorem ut anim officia nisi velit irure culpa. Ea ut et magna non velit laboris ex. Nostrud quis aliquip quis laborum aliquip."
-} {
+},{
     "_id": {
         "$oid": "57f38e443172255ec525edb4"
     },
     "name": "Home & Garden",
     "description": "Ut cillum do culpa labore eiusmod. Est do aute ipsum ipsum tempor qui voluptate cupidatat sit eu excepteur eiusmod occaecat sint. Voluptate quis aliquip dolore incididunt nisi quis in. Enim ea laborum elit aute mollit sunt. Laboris eiusmod velit pariatur do sunt officia tempor cupidatat voluptate commodo deserunt do. Consequat enim aliquip cillum enim consectetur duis occaecat consectetur excepteur mollit magna labore excepteur. Non ipsum quis laborum in culpa commodo consequat ex culpa sit."
-} {
+},{
     "_id": {
         "$oid": "57f38e443172255ec525edb5"
     },
     "name": "Motors",
     "description": "Aute fugiat laborum do veniam reprehenderit dolor fugiat velit sit sint incididunt laborum proident. Reprehenderit aliquip dolor est Lorem enim quis esse qui incididunt commodo pariatur amet. Pariatur officia tempor et Lorem incididunt ex eiusmod sit nisi laboris elit sint officia. Incididunt ad quis do duis culpa aliqua. Laboris irure laborum elit fugiat sit minim. Elit do magna fugiat quis."
-} {
+},{
     "_id": {
         "$oid": "57f38e443172255ec525edb6"
     },
     "name": "Musical instruments & Gear",
     "description": "Commodo anim culpa Lorem eu non nostrud Lorem et reprehenderit et ad excepteur laboris amet. Id enim et anim dolore aliqua et tempor. Enim laboris laborum aute aliqua dolor laborum tempor. Ullamco cillum culpa fugiat sunt do cillum anim est sunt velit enim ipsum. Quis ex ad cillum ad mollit sunt consectetur ut."
-} {
+},{
     "_id": {
         "$oid": "57f38e443172255ec525edb7"
     },
     "name": "Sporting goods",
     "description": "Commodo eu laborum amet mollit mollit anim ut occaecat consequat ea. Non fugiat amet in duis duis. Dolor dolor dolor ullamco aliquip dolore ea ut laborum. Cillum commodo labore culpa aliquip."
-} {
+},{
     "_id": {
         "$oid": "57f38e443172255ec525edb8"
     },
     "name": "Other",
     "description": "Anim Lorem irure est officia do. Proident aute elit amet mollit ea deserunt irure ullamco velit qui commodo minim ullamco. Dolore deserunt eiusmod anim reprehenderit incididunt sint dolor adipisicing in id proident magna magna consectetur. Eu dolore ex nulla nulla velit ad in Lorem. Nostrud quis excepteur officia fugiat duis nisi eu do et tempor."
-}
+}]
