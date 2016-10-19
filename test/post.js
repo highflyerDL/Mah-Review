@@ -190,5 +190,46 @@ describe('Post controller', () => {
       });
   });
 
+    describe('/DELETE a Post', () => {
+        var testPost;
+        beforeEach(function() {
+            return Post.create({
+                title:"test",
+                description:"testing",
+                reward:100,
+                expire:9
+            }).then((post)=>{
+                testPost=post;
+            }).catch((err)=>{
+                done(err);
+            });
+        });
+        it('should response permission denied because not owner', (done) => {
+            testUser.isAdmin=false;
+            testUser.save().then(()=> {
+                server.del('/api/post/' + testPost._id)
+                    .set('Authorization', token)
+                    .expect(404)
+                    .expect("Content-type", /json/)
+                    .end(function (err, res) {
+                        res.body.message.should.be.equal("Permission denied");
+                        done(err);
+                    });
+            });
+        });
+        it('should delete post because user has permission', (done) => {
+            testUser.isAdmin=true;
+            testUser.save().then(()=>{
+                server.del('/api/post/' + testPost._id)
+                    .set('Authorization', token)
+                    .expect(200)
+                    .expect("Content-type", /json/)
+                    .end(function(err,res){
+                        res.body.message.should.be.equal("Post has been deleted.");
+                        done(err);
+                    });
+            });
+        });
+    });
 
 });
