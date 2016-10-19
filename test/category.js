@@ -10,6 +10,7 @@ let server = supertest(app);
 
 describe('Category controller', () => {
     var token;
+    var testUser;
     before((done) => {
         User.remove({})
         .then(()=>{
@@ -21,6 +22,7 @@ describe('Category controller', () => {
         })
         .then((user)=>{
           token=user.generateJwt();
+            testUser=user;
           return Category.remove({});
         }).then(()=>{
           done();
@@ -133,5 +135,45 @@ describe('Category controller', () => {
                 });
       });
   });
+
+    describe('/DELETE a category', () => {
+        var testCategory;
+        beforeEach(function() {
+            return Category.create({
+                name:"test",
+                description:"testing"
+            }).then((category)=>{
+                testCategory=category;
+            }).catch((err)=>{
+                done(err);
+            });
+        });
+        it('No permission', (done) => {
+            testUser.isAdmin=false;
+            testUser.save().then(()=> {
+                server.del('/api/category/' + testCategory._id)
+                    .set('Authorization', token)
+                    .expect(404)
+                    .expect("Content-type", /json/)
+                    .end(function (err, res) {
+                        res.body.message.should.be.equal('Permission denied');
+                        done(err);
+                    })
+            });
+        });
+        it('Right permission', (done) => {
+            testUser.isAdmin=true;
+            testUser.save().then(()=> {
+                server.del('/api/category/' + testCategory._id)
+                    .set('Authorization', token)
+                    .expect(200)
+                    .expect("Content-type", /json/)
+                    .end(function (err, res) {
+                        res.body.message.should.be.equal('Category has been deleted.');
+                        done(err);
+                    });
+            });
+        });
+    });
 
 });

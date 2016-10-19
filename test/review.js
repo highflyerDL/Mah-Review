@@ -117,51 +117,96 @@ describe('Review controller', () => {
     describe('/PUT update a review', () => {
         var testReview;
         beforeEach(function(done) {
-          Review.create({
-            content:"A test review",
-            post:testPost._id
-          }).then((review)=>{
-            testReview=review;
-            testPost.reviews.unshift(review);
-            return testPost.save();
-          }).then((post)=>{
-            done();
-          },done)
-          .catch((err)=>{
-            done(err);
-          });
+            Review.create({
+                content:"A test review",
+                post:testPost._id
+            }).then((review)=>{
+                testReview=review;
+                testPost.reviews.unshift(review);
+                return testPost.save();
+            }).then((post)=>{
+                done();
+            },done)
+                .catch((err)=>{
+                    done(err);
+                });
         });
         it('should response error because no permissions', (done) => {
             const data = {
                 content:"Another review content"
-              };
+            };
             server.put('/api/review/'+testReview._id)
-                  .set('Authorization',token)
-                  .send(data)
-                  .expect(400)
-                  .expect("Content-type",/json/)
-                  .end(function(err,res){
+                .set('Authorization',token)
+                .send(data)
+                .expect(400)
+                .expect("Content-type",/json/)
+                .end(function(err,res){
                     res.body.message.should.be.equal('Permission denied');
                     //res.body.should.have.property("data");
                     done(err);
-                  });
+                });
         });
         it('should update review with right permissions and data', (done) => {
             const data = {
                 content:"Another review content"
-              };
-              testUser.isAdmin=true;
-              testUser.save().then(()=>{
+            };
+            testUser.isAdmin=true;
+            testUser.save().then(()=>{
                 server.put('/api/review/'+testReview._id)
-                      .set('Authorization',token)
-                      .send(data)
-                      .expect(200)
-                      .expect("Content-type",/json/)
-                      .end(function(err,res){
+                    .set('Authorization',token)
+                    .send(data)
+                    .expect(200)
+                    .expect("Content-type",/json/)
+                    .end(function(err,res){
                         //res.body.data.content.should.be.equal("Another review content");
                         done(err);
-                      });
-              });
+                    });
+            });
+        });
+    });
+
+    describe('/DELETE a review', () => {
+        var testReview;
+        beforeEach(function(done) {
+            Review.create({
+                content:"A test review",
+                post:testPost._id
+            }).then((review)=>{
+                testReview=review;
+                testPost.reviews.unshift(review);
+                return testPost.save();
+            }).then((post)=>{
+                done();
+            },done)
+                .catch((err)=>{
+                    done(err);
+                });
+        });
+        it('should response error because no permissions', (done) => {
+            testUser.isAdmin= false;
+            testUser.save().then(()=>{
+                server.del('/api/review/'+testReview._id)
+                    .set('Authorization',token)
+                    .expect(401)
+                    .expect("Content-type",/json/)
+                    .end(function(err,res){
+                        res.body.message.should.be.equal('Permission denied');
+                        done(err);
+                    });
+            });
+        });
+        it('should delete review with right permissions', (done) => {
+            testUser.isAdmin=true;
+            testUser.save().then(()=>{
+                server.del('/api/review/'+testReview._id)
+                    .set('Authorization',token)
+                    .expect(200)
+                    .expect("Content-type",/json/)
+                    .end(function(err,res){
+                        res.body.message.should.be.equal("Delete successfully");
+                        done(err);
+                    });
+            });
         });
     });
 
